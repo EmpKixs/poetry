@@ -1,0 +1,43 @@
+#################################### common config : ####################################
+
+# 应用服务web访问端口
+server:
+  port: 8050
+spring:
+  application:
+    name: poetry
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      filter:
+        stat:
+          log-slow-sql: true
+          merge-sql: false
+          slow-sql-millis: 1000
+      initial-size: 10
+      max-active: 100
+      max-pool-prepared-statement-per-connection-size: 20
+      max-wait: 60000
+      min-evictable-idle-time-millis: 300000
+      min-idle: 10
+      password: root
+      pool-prepared-statements: true
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      time-between-eviction-runs-millis: 60000
+      url: jdbc:mysql://127.0.0.1:3307/poetry?characterEncoding=utf8&useSSL=false&zeroDateTimeBehavior=convertToNull
+      username: root
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  main:
+    allow-bean-definition-overriding: true
+
+
+
+
+
