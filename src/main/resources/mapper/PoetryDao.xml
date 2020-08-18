@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kixs.poetry.dao.PoetryDao">
+
+    <resultMap type="com.kixs.poetry.entity.Poetry" id="PoetryMap">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="INTEGER"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="authorId" column="author_id" jdbcType="VARCHAR"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="notes" column="notes" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="PoetryColumns">
+        id, type, title, author_id, content, notes        
+    </sql>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="PoetryMap">
+        SELECT
+        <include refid="PoetryColumns"/>
+
+        FROM poetry.poetry
+        <where>
+            <if test="id != null and id != ''">
+                AND id = #{id}
+            </if>
+            <if test="type != null">
+                AND type = #{type}
+            </if>
+            <if test="title != null and title != ''">
+                AND title = #{title}
+            </if>
+            <if test="authorId != null and authorId != ''">
+                AND author_id = #{authorId}
+            </if>
+            <if test="content != null and content != ''">
+                AND content = #{content}
+            </if>
+            <if test="notes != null and notes != ''">
+                AND notes = #{notes}
+            </if>
+        </where>
+    </select>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        UPDATE poetry.poetry
+        <set>
+            <if test="type != null">
+                type = #{type},
+            </if>
+            <if test="title != null and title != ''">
+                title = #{title},
+            </if>
+            <if test="authorId != null and authorId != ''">
+                author_id = #{authorId},
+            </if>
+            <if test="content != null and content != ''">
+                content = #{content},
+            </if>
+            <if test="notes != null and notes != ''">
+                notes = #{notes},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+</mapper>
