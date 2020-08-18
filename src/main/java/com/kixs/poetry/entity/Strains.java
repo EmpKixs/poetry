@@ -25,5 +25,4 @@ public class Strains implements Serializable {
      */
     private String strains;
 
-
 }
