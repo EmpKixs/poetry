@@ -3,6 +3,7 @@ package com.kixs.poetry.service.impl;
 import com.kixs.poetry.dao.AuthorDao;
 import com.kixs.poetry.entity.Author;
 import com.kixs.poetry.service.AuthorService;
+import com.kixs.poetry.utils.service.impl.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**

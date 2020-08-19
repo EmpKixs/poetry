@@ -3,6 +3,7 @@ package com.kixs.poetry.service.impl;
 import com.kixs.poetry.dao.StrainsDao;
 import com.kixs.poetry.entity.Strains;
 import com.kixs.poetry.service.StrainsService;
+import com.kixs.poetry.utils.service.impl.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**
