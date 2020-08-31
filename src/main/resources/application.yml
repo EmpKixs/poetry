@@ -37,7 +37,8 @@ spring:
   main:
     allow-bean-definition-overriding: true
 
-
+poetry:
+  base-dir: D:\Github\chinese-poetrys
 
 
 
