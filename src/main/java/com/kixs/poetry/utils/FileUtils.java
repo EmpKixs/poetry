@@ -1,9 +1,6 @@
 package com.kixs.poetry.utils;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * 文件操作工具类
@@ -27,6 +24,20 @@ public class FileUtils {
         }
 
         return directory.listFiles();
+    }
+
+    /**
+     * 获取文件夹下所有文件
+     *
+     * @param path 文件夹路径
+     * @return 文件列表
+     */
+    public static File[] listDirectoryFiles(String path, FilenameFilter filter) {
+        File directory = new File(path);
+        if (!directory.isDirectory()) {
+            throw new RuntimeException("文件夹不存在：" + path);
+        }
+        return directory.listFiles(filter);
     }
 
     /**
