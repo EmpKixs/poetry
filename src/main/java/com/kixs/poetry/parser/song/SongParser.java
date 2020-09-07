@@ -1,6 +1,7 @@
 package com.kixs.poetry.parser.song;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.kixs.poetry.entity.Author;
 import com.kixs.poetry.entity.Poetry;
 import com.kixs.poetry.parser.ParseContext;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -29,12 +31,10 @@ public class SongParser implements ParseService {
         String authorFile = filePath + "\\authors.song.json";
         String authorData = FileUtils.read(authorFile);
         List<SongAuthor> songAuthors = JSON.parseArray(authorData, SongAuthor.class);
-        log.debug("解析数据：{}", songAuthors.size());
         ParseContext context = new ParseContext();
         songAuthors.stream().parallel().forEach(song -> {
-            song.setId(song.getId().replace("-", ""));
             Author author = new Author();
-            author.setId(song.getId());
+            author.setId(IdWorker.getIdStr());
             author.setName(song.getName());
             author.setDescription(song.getDesc());
             context.putAuthor(author);
@@ -45,11 +45,21 @@ public class SongParser implements ParseService {
         if (files != null && files.length > 0) {
             Stream.of(files).parallel().forEach(file -> {
                 String data = FileUtils.read(file);
-                List<Poetry> poetries = JSON.parseArray(data, Poetry.class);
-                poetries.forEach(context::addPoetry);
+                List<SongPoetry> poetries = JSON.parseArray(data, SongPoetry.class);
+                poetries.stream().parallel().forEach(song -> {
+                    Poetry poetry = new Poetry();
+                    poetry.setId(IdWorker.getIdStr());
+                    poetry.setTitle(song.getTitle());
+                    Author author = context.getAuthor(song.getAuthor());
+                    if (Objects.nonNull(author)) {
+                        poetry.setAuthorId(author.getId());
+                    }
+                    poetry.setContent(song.getParagraphs());
+                    context.addPoetry(poetry);
+                });
             });
         }
-
+        log.debug("解析数据：作者-{}，诗词-{}", context.getAuthorMap().size(), context.getPoetries().size());
         return null;
     }
 
