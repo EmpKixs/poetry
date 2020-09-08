@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.kixs.poetry.entity.Author;
 import com.kixs.poetry.entity.Poetry;
 import com.kixs.poetry.parser.ParseContext;
-import com.kixs.poetry.parser.ParseService;
+import com.kixs.poetry.parser.PoetryParser;
 import com.kixs.poetry.utils.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,7 +23,7 @@ import java.util.stream.Stream;
  * @since 2020/8/19 13:10
  */
 @Slf4j
-public class SongParser implements ParseService {
+public class SongParser implements PoetryParser {
 
     @Override
     public ParseContext parse(String filePath) {
@@ -60,7 +60,7 @@ public class SongParser implements ParseService {
             });
         }
         log.debug("解析数据：作者-{}，诗词-{}", context.getAuthorMap().size(), context.getPoetries().size());
-        return null;
+        return context;
     }
 
     public static void main(String[] args) {
