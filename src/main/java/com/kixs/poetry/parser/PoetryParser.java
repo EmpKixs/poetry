@@ -8,7 +8,7 @@ package com.kixs.poetry.parser;
  * @since 2020/8/19 13:10
  */
 public interface PoetryParser {
-
+ 
     /**
      * 文件解析
      *
