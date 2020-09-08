@@ -1,4 +1,4 @@
-package com.kixs.poetry.parser.song;
+package com.kixs.poetry.parser.tang;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
@@ -16,23 +16,23 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 /**
- * 宋诗词解析
+ * 唐诗词解析
  *
  * @author suyixing
  * @version v1.0.0
  * @since 2020/8/19 13:10
  */
 @Slf4j
-public class SongParser implements PoetryParser {
+public class TangParser implements PoetryParser {
 
     @Override
     public ParseContext parse(String filePath) {
         // 作者解析
-        String authorFile = filePath + "\\authors.song.json";
+        String authorFile = filePath + "\\authors.tang.json";
         String authorData = FileUtils.read(authorFile);
-        List<SongAuthor> songAuthors = JSON.parseArray(authorData, SongAuthor.class);
+        List<TangAuthor> tangAuthors = JSON.parseArray(authorData, TangAuthor.class);
         ParseContext context = new ParseContext();
-        songAuthors.stream().parallel().forEach(song -> {
+        tangAuthors.stream().parallel().forEach(song -> {
             Author author = new Author();
             author.setId(IdWorker.getIdStr());
             author.setName(song.getName());
@@ -40,12 +40,12 @@ public class SongParser implements PoetryParser {
             context.putAuthor(author);
         });
         // 诗词解析
-        String pattern = "^poet.song.([0-9])*.json$";
+        String pattern = "^poet.tang.([0-9])*.json$";
         File[] files = FileUtils.listDirectoryFiles(filePath, (dir, filename) -> Pattern.matches(pattern, filename));
         if (files != null && files.length > 0) {
             Stream.of(files).parallel().forEach(file -> {
                 String data = FileUtils.read(file);
-                List<SongPoetry> poetries = JSON.parseArray(data, SongPoetry.class);
+                List<TangPoetry> poetries = JSON.parseArray(data, TangPoetry.class);
                 poetries.stream().parallel().forEach(song -> {
                     Poetry poetry = new Poetry();
                     poetry.setId(IdWorker.getIdStr());
@@ -65,7 +65,7 @@ public class SongParser implements PoetryParser {
 
     public static void main(String[] args) {
         String filePath = "D:\\Github\\chinese-poetry\\json";
-        SongParser parser = new SongParser();
+        TangParser parser = new TangParser();
         parser.parse(filePath);
     }
 }
