@@ -48,12 +48,14 @@ public class NanTangParser implements PoetryParser {
         poetries.stream().parallel().forEach(wudai -> {
             Poetry poetry = new Poetry();
             poetry.setId(IdWorker.getIdStr());
-            poetry.setTitle(wudai.getRhythmic());
+            poetry.setTitle(wudai.getTitle());
+            poetry.setRhythmic(wudai.getRhythmic());
             Author author = context.getAuthor(wudai.getAuthor());
             if (Objects.nonNull(author)) {
                 poetry.setAuthorId(author.getId());
             }
             poetry.setContent(wudai.getParagraphs());
+            poetry.setNotes(wudai.getNotes());
             context.addPoetry(poetry);
         });
         log.debug("解析数据：作者-{}，诗词-{}", context.getAuthorMap().size(), context.getPoetries().size());
