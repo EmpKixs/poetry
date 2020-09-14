@@ -29,6 +29,10 @@ public class Poetry implements Serializable {
      */
     private String title;
     /**
+     * 词牌名
+     */
+    private String rhythmic;
+    /**
      * 作者
      */
     private String authorId;

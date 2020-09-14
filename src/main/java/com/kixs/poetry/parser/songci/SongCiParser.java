@@ -1,4 +1,4 @@
-package com.kixs.poetry.parser.tang;
+package com.kixs.poetry.parser.songci;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
@@ -16,45 +16,46 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 /**
- * 唐诗词解析
+ * 宋诗词解析
  *
  * @author suyixing
  * @version v1.0.0
  * @since 2020/8/19 13:10
  */
 @Slf4j
-public class TangParser implements PoetryParser {
+public class SongCiParser implements PoetryParser {
 
     @Override
     public ParseContext parse(String filePath) {
         // 作者解析
-        String authorFile = filePath + "\\authors.tang.json";
+        String authorFile = filePath + "\\author.song.json";
         String authorData = FileUtils.read(authorFile);
-        List<TangAuthor> tangAuthors = JSON.parseArray(authorData, TangAuthor.class);
+        List<SongCiAuthor> songCiAuthors = JSON.parseArray(authorData, SongCiAuthor.class);
         ParseContext context = new ParseContext();
-        tangAuthors.stream().parallel().forEach(tang -> {
+        songCiAuthors.stream().parallel().forEach(song -> {
             Author author = new Author();
             author.setId(IdWorker.getIdStr());
-            author.setName(tang.getName());
-            author.setDescription(tang.getDesc());
+            author.setName(song.getName());
+            author.setDescription(song.getDescription());
+            author.setShortDescription(song.getShortDescription());
             context.putAuthor(author);
         });
         // 诗词解析
-        String pattern = "^poet.tang.([0-9])*.json$";
+        String pattern = "^ci.song.([0-9])*.json$";
         File[] files = FileUtils.listDirectoryFiles(filePath, (dir, filename) -> Pattern.matches(pattern, filename));
         if (files != null && files.length > 0) {
             Stream.of(files).parallel().forEach(file -> {
                 String data = FileUtils.read(file);
-                List<TangPoetry> poetries = JSON.parseArray(data, TangPoetry.class);
-                poetries.stream().parallel().forEach(tang -> {
+                List<SongCi> poetries = JSON.parseArray(data, SongCi.class);
+                poetries.stream().parallel().forEach(song -> {
                     Poetry poetry = new Poetry();
                     poetry.setId(IdWorker.getIdStr());
-                    poetry.setTitle(tang.getTitle());
-                    Author author = context.getAuthor(tang.getAuthor());
+                    poetry.setTitle(song.getRhythmic());
+                    Author author = context.getAuthor(song.getAuthor());
                     if (Objects.nonNull(author)) {
                         poetry.setAuthorId(author.getId());
                     }
-                    poetry.setContent(tang.getParagraphs());
+                    poetry.setContent(song.getParagraphs());
                     context.addPoetry(poetry);
                 });
             });
@@ -64,8 +65,8 @@ public class TangParser implements PoetryParser {
     }
 
     public static void main(String[] args) {
-        String filePath = "D:\\Github\\chinese-poetry\\json";
-        TangParser parser = new TangParser();
+        String filePath = "D:\\Github\\chinese-poetry\\ci";
+        SongCiParser parser = new SongCiParser();
         parser.parse(filePath);
     }
 }
