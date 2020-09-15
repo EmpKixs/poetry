@@ -24,6 +24,10 @@ import java.util.stream.Stream;
  */
 @Slf4j
 public class HuajianjiParser implements PoetryParser {
+    @Override
+    public String dynasty() {
+        return "五代十国";
+    }
 
     @Override
     public ParseContext parse(String filePath) {

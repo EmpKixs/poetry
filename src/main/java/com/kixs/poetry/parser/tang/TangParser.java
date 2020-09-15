@@ -26,6 +26,11 @@ import java.util.stream.Stream;
 public class TangParser implements PoetryParser {
 
     @Override
+    public String dynasty() {
+        return "唐朝";
+    }
+
+    @Override
     public ParseContext parse(String filePath) {
         // 作者解析
         String authorFile = filePath + "\\authors.tang.json";

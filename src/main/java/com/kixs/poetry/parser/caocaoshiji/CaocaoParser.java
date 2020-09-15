@@ -23,6 +23,10 @@ import java.util.stream.Stream;
  */
 @Slf4j
 public class CaocaoParser implements PoetryParser {
+    @Override
+    public String dynasty() {
+        return "唐朝";
+    }
 
     @Override
     public ParseContext parse(String filePath) {

@@ -23,6 +23,11 @@ import java.util.Objects;
 public class YuanquParser implements PoetryParser {
 
     @Override
+    public String dynasty() {
+        return "元朝";
+    }
+
+    @Override
     public ParseContext parse(String filePath) {
         ParseContext context = new ParseContext();
         // 诗词解析

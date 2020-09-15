@@ -28,6 +28,11 @@ import java.util.stream.Stream;
 public class NanTangParser implements PoetryParser {
 
     @Override
+    public String dynasty() {
+        return "五代十国";
+    }
+
+    @Override
     public ParseContext parse(String filePath) {
         // 作者解析
         String authorFile = filePath + "\\authors.json";

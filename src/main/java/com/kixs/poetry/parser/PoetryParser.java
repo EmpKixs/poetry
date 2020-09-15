@@ -7,7 +7,7 @@ package com.kixs.poetry.parser;
  * @version v1.0.0
  * @since 2020/8/19 13:10
  */
-public interface PoetryParser {
+public interface PoetryParser extends DynastyParser {
 
     /**
      * 文件解析
