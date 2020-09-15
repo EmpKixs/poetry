@@ -32,9 +32,9 @@ public class NanTangParser implements PoetryParser {
         // 作者解析
         String authorFile = filePath + "\\authors.json";
         String authorData = FileUtils.read(authorFile);
-        List<WudaiAuthor> songCiAuthors = JSON.parseArray(authorData, WudaiAuthor.class);
+        List<WudaiAuthor> nanTangAuthors = JSON.parseArray(authorData, WudaiAuthor.class);
         ParseContext context = new ParseContext();
-        songCiAuthors.stream().parallel().forEach(nantang -> {
+        nanTangAuthors.stream().parallel().forEach(nantang -> {
             Author author = new Author();
             author.setId(IdWorker.getIdStr());
             author.setName(nantang.getName());
