@@ -44,14 +44,15 @@ public class HuajianjiParser implements PoetryParser {
                     poetry.setId(IdWorker.getIdStr());
                     poetry.setTitle(wudai.getTitle());
                     poetry.setRhythmic(wudai.getRhythmic());
-                    Author author = context.getAuthor(wudai.getAuthor());
+                    Author author = context.getAuthor(this::generateDynastyAuthorKey, wudai.getAuthor());
                     if (Objects.isNull(author)) {
                         synchronized (HuajianjiParser.class) {
-                            author = context.getAuthor(wudai.getAuthor());
+                            author = context.getAuthor(this::generateDynastyAuthorKey, wudai.getAuthor());
                             if (Objects.isNull(author)) {
                                 author = new Author();
                                 author.setId(IdWorker.getIdStr());
                                 author.setName(wudai.getAuthor());
+                                author.setDynasty(dynasty());
                                 context.putAuthor(author);
                             }
                         }

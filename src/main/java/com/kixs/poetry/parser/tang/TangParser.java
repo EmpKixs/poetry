@@ -41,6 +41,7 @@ public class TangParser implements PoetryParser {
             Author author = new Author();
             author.setId(IdWorker.getIdStr());
             author.setName(tang.getName());
+            author.setDynasty(dynasty());
             author.setDescription(tang.getDesc());
             context.putAuthor(author);
         });
@@ -55,7 +56,7 @@ public class TangParser implements PoetryParser {
                     Poetry poetry = new Poetry();
                     poetry.setId(IdWorker.getIdStr());
                     poetry.setTitle(tang.getTitle());
-                    Author author = context.getAuthor(tang.getAuthor());
+                    Author author = context.getAuthor(this::generateDynastyAuthorKey, tang.getAuthor());
                     if (Objects.nonNull(author)) {
                         poetry.setAuthorId(author.getId());
                     }

@@ -37,5 +37,12 @@ public class Author implements Serializable {
      */
     private String shortDescription;
 
-
+    /**
+     * 生成朝代作者关键字
+     *
+     * @return Key
+     */
+    public String generateDynastyAuthorKey() {
+        return dynasty + "·" + name;
+    }
 }

@@ -43,6 +43,7 @@ public class NanTangParser implements PoetryParser {
             Author author = new Author();
             author.setId(IdWorker.getIdStr());
             author.setName(nantang.getName());
+            author.setDynasty(dynasty());
             author.setDescription(nantang.getDesc());
             context.putAuthor(author);
         });
@@ -55,7 +56,7 @@ public class NanTangParser implements PoetryParser {
             poetry.setId(IdWorker.getIdStr());
             poetry.setTitle(wudai.getTitle());
             poetry.setRhythmic(wudai.getRhythmic());
-            Author author = context.getAuthor(wudai.getAuthor());
+            Author author = context.getAuthor(this::generateDynastyAuthorKey, wudai.getAuthor());
             if (Objects.nonNull(author)) {
                 poetry.setAuthorId(author.getId());
             }

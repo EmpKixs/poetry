@@ -38,14 +38,15 @@ public class YuanquParser implements PoetryParser {
             Poetry poetry = new Poetry();
             poetry.setId(IdWorker.getIdStr());
             poetry.setTitle(qu.getTitle());
-            Author author = context.getAuthor(qu.getAuthor());
+            Author author = context.getAuthor(this::generateDynastyAuthorKey, qu.getAuthor());
             if (Objects.isNull(author)) {
                 synchronized (YuanquParser.class) {
-                    author = context.getAuthor(qu.getAuthor());
+                    author = context.getAuthor(this::generateDynastyAuthorKey, qu.getAuthor());
                     if (Objects.isNull(author)) {
                         author = new Author();
                         author.setId(IdWorker.getIdStr());
                         author.setName(qu.getAuthor());
+                        author.setDynasty(dynasty());
                         context.putAuthor(author);
                     }
                 }

@@ -40,6 +40,7 @@ public class SongCiParser implements PoetryParser {
             Author author = new Author();
             author.setId(IdWorker.getIdStr());
             author.setName(song.getName());
+            author.setDynasty(dynasty());
             author.setDescription(song.getDescription());
             author.setShortDescription(song.getShortDescription());
             context.putAuthor(author);
@@ -55,7 +56,7 @@ public class SongCiParser implements PoetryParser {
                     Poetry poetry = new Poetry();
                     poetry.setId(IdWorker.getIdStr());
                     poetry.setTitle(song.getRhythmic());
-                    Author author = context.getAuthor(song.getAuthor());
+                    Author author = context.getAuthor(this::generateDynastyAuthorKey, song.getAuthor());
                     if (Objects.nonNull(author)) {
                         poetry.setAuthorId(author.getId());
                     }

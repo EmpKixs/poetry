@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 /**
  * 解析上下文
@@ -42,7 +43,7 @@ public class ParseContext {
      * @param author 作者信息
      */
     public void putAuthor(Author author) {
-        authorMap.put(author.getName(), author);
+        authorMap.put(author.generateDynastyAuthorKey(), author);
     }
 
     /**
@@ -51,8 +52,8 @@ public class ParseContext {
      * @param name 作者名称
      * @return 作责信息
      */
-    public Author getAuthor(String name) {
-        return authorMap.get(name);
+    public Author getAuthor(Function<String, String> generator, String name) {
+        return authorMap.get(generator.apply(name));
     }
 
     /**
@@ -71,5 +72,16 @@ public class ParseContext {
      */
     public void addStrains(Strains strains) {
         strainsList.add(strains);
+    }
+
+    /**
+     * 其它上下文加入当前上下文
+     *
+     * @param other 其它上下文
+     */
+    public void add(ParseContext other) {
+        this.authorMap.putAll(other.getAuthorMap());
+        this.poetries.addAll(other.poetries);
+        this.strainsList.addAll(other.strainsList);
     }
 }

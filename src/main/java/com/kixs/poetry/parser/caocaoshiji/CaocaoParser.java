@@ -8,6 +8,7 @@ import com.kixs.poetry.parser.ParseContext;
 import com.kixs.poetry.parser.PoetryParser;
 import com.kixs.poetry.utils.FileUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.stream.Stream;
  * @since 2020/8/19 13:10
  */
 @Slf4j
+@Service
 public class CaocaoParser implements PoetryParser {
     @Override
     public String dynasty() {
@@ -35,6 +37,7 @@ public class CaocaoParser implements PoetryParser {
         Author author = new Author();
         author.setId(IdWorker.getIdStr());
         author.setName("曹操");
+        author.setDynasty(dynasty());
         context.putAuthor(author);
         // 诗词解析
         String pattern = "^caocao.json$";

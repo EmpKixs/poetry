@@ -24,6 +24,7 @@ import java.util.stream.Stream;
  */
 @Slf4j
 public class SongParser implements PoetryParser {
+
     @Override
     public String dynasty() {
         return "宋朝";
@@ -40,6 +41,7 @@ public class SongParser implements PoetryParser {
             Author author = new Author();
             author.setId(IdWorker.getIdStr());
             author.setName(song.getName());
+            author.setDynasty(dynasty());
             author.setDescription(song.getDesc());
             context.putAuthor(author);
         });
@@ -54,7 +56,7 @@ public class SongParser implements PoetryParser {
                     Poetry poetry = new Poetry();
                     poetry.setId(IdWorker.getIdStr());
                     poetry.setTitle(song.getTitle());
-                    Author author = context.getAuthor(song.getAuthor());
+                    Author author = context.getAuthor(this::generateDynastyAuthorKey, song.getAuthor());
                     if (Objects.nonNull(author)) {
                         poetry.setAuthorId(author.getId());
                     }
