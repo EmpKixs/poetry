@@ -56,6 +56,7 @@ public class SongCiParser implements PoetryParser {
                     Poetry poetry = new Poetry();
                     poetry.setId(IdWorker.getIdStr());
                     poetry.setTitle(song.getRhythmic());
+                    poetry.setRhythmic(song.getRhythmic());
                     Author author = context.getAuthor(this::generateDynastyAuthorKey, song.getAuthor());
                     if (Objects.nonNull(author)) {
                         poetry.setAuthorId(author.getId());
