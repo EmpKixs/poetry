@@ -12,7 +12,6 @@ import java.io.Serializable;
  * @version v1.0.0
  * @since 2020/8/18 23:29
  */
-@Data
 @TableName("poetry")
 public class Poetry implements Serializable {
     private static final long serialVersionUID = -98212766921806597L;
@@ -45,5 +44,59 @@ public class Poetry implements Serializable {
      */
     private String notes;
 
+    public String getId() {
+        return id;
+    }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getRhythmic() {
+        return rhythmic;
+    }
+
+    public void setRhythmic(String rhythmic) {
+        this.rhythmic = rhythmic;
+    }
+
+    public String getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(String authorId) {
+        this.authorId = authorId;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
 }

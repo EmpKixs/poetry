@@ -2,12 +2,14 @@ package com.kixs.poetry.parser.yuanqu;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.kixs.poetry.constant.ParserConstant;
 import com.kixs.poetry.entity.Author;
 import com.kixs.poetry.entity.Poetry;
 import com.kixs.poetry.parser.ParseContext;
 import com.kixs.poetry.parser.PoetryParser;
 import com.kixs.poetry.utils.FileUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
@@ -20,6 +22,7 @@ import java.util.Objects;
  * @since 2020/8/19 13:10
  */
 @Slf4j
+@Service(ParserConstant.YUAN_QU)
 public class YuanquParser implements PoetryParser {
 
     @Override

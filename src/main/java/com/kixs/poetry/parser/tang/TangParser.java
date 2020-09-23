@@ -2,12 +2,14 @@ package com.kixs.poetry.parser.tang;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.kixs.poetry.constant.ParserConstant;
 import com.kixs.poetry.entity.Author;
 import com.kixs.poetry.entity.Poetry;
 import com.kixs.poetry.parser.ParseContext;
 import com.kixs.poetry.parser.PoetryParser;
 import com.kixs.poetry.utils.FileUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.List;
@@ -23,6 +25,7 @@ import java.util.stream.Stream;
  * @since 2020/8/19 13:10
  */
 @Slf4j
+@Service(ParserConstant.TANG_POETRY)
 public class TangParser implements PoetryParser {
 
     @Override
