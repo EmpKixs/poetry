@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
  * @version v1.0.0
  * @since 2020/8/18 23:28
  */
-@Service("authorService")
+@Service
 public class AuthorServiceImpl extends BaseServiceImpl<AuthorDao, Author> implements AuthorService {
 
 }

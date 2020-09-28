@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
  * @version v1.0.0
  * @since 2020/8/18 23:29
  */
-@Service("poetryService")
+@Service
 public class PoetryServiceImpl extends BaseServiceImpl<PoetryDao, Poetry> implements PoetryService {
 
 }

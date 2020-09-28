@@ -16,6 +16,7 @@ import com.kixs.poetry.utils.service.BaseService;
 import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.session.SqlSession;
 import org.mybatis.spring.SqlSessionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -33,7 +34,7 @@ import java.util.Map;
  */
 public abstract class BaseServiceImpl<M extends BaseMapper<T>, T> implements BaseService<T> {
 
-    @Resource
+    @Autowired
     private M baseDao;
 
     /**

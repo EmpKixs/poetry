@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
  * @version v1.0.0
  * @since 2020/8/18 23:30
  */
-@Service("strainsService")
+@Service
 public class StrainsServiceImpl extends BaseServiceImpl<StrainsDao, Strains> implements StrainsService {
 
 }
