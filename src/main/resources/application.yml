@@ -20,7 +20,6 @@ spring:
       max-wait: 60000
       min-evictable-idle-time-millis: 300000
       min-idle: 10
-      password: root
       pool-prepared-statements: true
       stat-view-servlet:
         enabled: true
@@ -29,8 +28,9 @@ spring:
       test-on-return: false
       test-while-idle: true
       time-between-eviction-runs-millis: 60000
-      url: jdbc:mysql://127.0.0.1:3307/poetry?characterEncoding=utf8&useSSL=false&zeroDateTimeBehavior=convertToNull
+      url: jdbc:mysql://192.168.0.102:3306/poetry?characterEncoding=utf8&useSSL=false&zeroDateTimeBehavior=convertToNull
       username: root
+      password: root
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
