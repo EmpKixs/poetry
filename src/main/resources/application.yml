@@ -4,6 +4,8 @@
 server:
   port: 8050
 spring:
+  profiles:
+    active: local
   application:
     name: poetry
   datasource:
