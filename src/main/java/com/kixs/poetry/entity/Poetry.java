@@ -12,6 +12,7 @@ import java.io.Serializable;
  * @version v1.0.0
  * @since 2020/8/18 23:29
  */
+@Data
 @TableName("poetry")
 public class Poetry implements Serializable {
     private static final long serialVersionUID = -98212766921806597L;

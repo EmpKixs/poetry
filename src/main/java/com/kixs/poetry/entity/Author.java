@@ -1,6 +1,7 @@
 package com.kixs.poetry.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
 
 import java.io.Serializable;
 
@@ -11,6 +12,7 @@ import java.io.Serializable;
  * @version v1.0.0
  * @since 2020/8/18 23:28
  */
+@Data
 @TableName("author")
 public class Author implements Serializable {
     private static final long serialVersionUID = -31700693051048888L;
