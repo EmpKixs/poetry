@@ -4,12 +4,13 @@ import com.kixs.poetry.enums.ParserEnum;
 import com.kixs.poetry.service.AuthorService;
 import com.kixs.poetry.service.PoetryService;
 import com.kixs.poetry.service.StrainsService;
-import com.kixs.poetry.utils.EmojiFilter;
+import com.kixs.poetry.utils.EmojiUtils;
+import com.spreada.utils.chinese.ZHConverter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.Map;
@@ -24,6 +25,8 @@ import java.util.Map;
 @Slf4j
 @Component
 public class ParserSupport {
+
+    private ZHConverter converter = ZHConverter.getInstance(ZHConverter.SIMPLIFIED);
 
     @Resource
     private Map<String, PoetryParser> poetryParserMap;
@@ -40,6 +43,7 @@ public class ParserSupport {
     @Transactional(rollbackFor = Exception.class)
     public ParseContext parse(String baseDir) {
         ParseContext context = new ParseContext();
+
         for (ParserEnum parser : ParserEnum.values()) {
             PoetryParser poetryParser = poetryParserMap.get(parser.getParser());
             if (poetryParser == null) {
@@ -51,27 +55,34 @@ public class ParserSupport {
         }
         log.debug("解析数据：作者-{}，诗词-{}", context.getAuthorMap().size(), context.getPoetries().size());
         if (!CollectionUtils.isEmpty(context.getPoetries())) {
-            poetryService.insertBatch(context.getPoetries());
             context.getPoetries().forEach(poetry -> {
-                boolean containsEmoji = EmojiFilter.containsEmoji(poetry.getTitle())
-                        || EmojiFilter.containsEmoji(poetry.getContent())
-                        || (StringUtils.isNotBlank(poetry.getNotes()) && EmojiFilter.containsEmoji(poetry.getNotes()));
-                if (containsEmoji) {
-                    log.debug("包含表情符的诗词：{}", poetry);
-                }
+                poetry.setTitle(convert(EmojiUtils.replaceEmoji(poetry.getTitle())));
+                poetry.setContent(convert(EmojiUtils.replaceEmoji(poetry.getContent())));
+                poetry.setRhythmic(convert(EmojiUtils.replaceEmoji(poetry.getRhythmic())));
             });
+            poetryService.insertBatch(context.getPoetries());
         }
         if (!CollectionUtils.isEmpty(context.getAuthorMap())) {
-            authorService.insertBatch(context.getAuthorMap().values());
             context.getAuthorMap().values().forEach(author -> {
-                boolean containsEmoji = EmojiFilter.containsEmoji(author.getName())
-                        || (StringUtils.isNotBlank(author.getDescription()) && EmojiFilter.containsEmoji(author.getDescription()))
-                        || (StringUtils.isNotBlank(author.getShortDescription()) && EmojiFilter.containsEmoji(author.getShortDescription()));
-                if (containsEmoji) {
-                    log.debug("包含表情符的作者信息：{}", author);
-                }
+                author.setName(convert(EmojiUtils.replaceEmoji(author.getName())));
+                author.setDescription(convert(EmojiUtils.replaceEmoji(author.getDescription())));
+                author.setShortDescription(convert(EmojiUtils.replaceEmoji(author.getShortDescription())));
             });
+            authorService.insertBatch(context.getAuthorMap().values());
         }
         return context;
+    }
+
+    private String convert(String source) {
+        if (StringUtils.isEmpty(source)) {
+            return source;
+        }
+        return converter.convert(source);
+    }
+
+    public static void main(String[] args) {
+        String data = "靈山話月";
+        ZHConverter converter = ZHConverter.getInstance(ZHConverter.SIMPLIFIED);
+        System.out.println(converter.convert(data));
     }
 }
