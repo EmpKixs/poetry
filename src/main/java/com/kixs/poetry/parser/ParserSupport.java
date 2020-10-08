@@ -1,14 +1,11 @@
 package com.kixs.poetry.parser;
 
 import com.hankcs.hanlp.HanLP;
-import com.kixs.poetry.entity.Author;
-import com.kixs.poetry.entity.Poetry;
 import com.kixs.poetry.enums.ParserEnum;
 import com.kixs.poetry.service.AuthorService;
 import com.kixs.poetry.service.PoetryService;
 import com.kixs.poetry.service.StrainsService;
 import com.kixs.poetry.utils.EmojiUtils;
-import com.spreada.utils.chinese.ZHConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,8 +13,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -62,24 +57,8 @@ public class ParserSupport {
                 poetry.setTitle(convert(EmojiUtils.replaceEmoji(poetry.getTitle())));
                 poetry.setContent(convert(EmojiUtils.replaceEmoji(poetry.getContent())));
                 poetry.setRhythmic(convert(EmojiUtils.replaceEmoji(poetry.getRhythmic())));
-                // poetryService.insert(poetry);
+                poetryService.insert(poetry);
             });
-            List<List<Poetry>> data = new ArrayList<>();
-            int index = 0;
-            int step = 1000;
-            int length = context.getPoetries().size();
-            while (index <= length) {
-                int toIndex = index + step;
-                if (toIndex >= length) {
-                    data.add(context.getPoetries().subList(index, length));
-                    // poetryService.insertBatch(context.getPoetries().subList(index, length));
-                } else {
-                    data.add(context.getPoetries().subList(index, toIndex));
-                    // poetryService.insertBatch(context.getPoetries().subList(index, toIndex));
-                }
-                index = toIndex;
-            }
-            data.parallelStream().forEach(poetries -> poetryService.insertBatch(poetries));
         }
         if (!CollectionUtils.isEmpty(context.getAuthorMap())) {
             context.getAuthorMap().values().parallelStream().forEach(author -> {
@@ -88,23 +67,6 @@ public class ParserSupport {
                 author.setShortDescription(convert(EmojiUtils.replaceEmoji(author.getShortDescription())));
                 authorService.insert(author);
             });
-            // authorService.insertBatch(context.getAuthorMap().values());
-            List<List<Author>> data = new ArrayList<>();
-            int index = 0;
-            int step = 1000;
-            int length = context.getPoetries().size();
-            while (index <= length) {
-                int toIndex = index + step;
-                if (toIndex >= length) {
-                    data.add(context.getAuthorMap().values().subList(index, length));
-                    // poetryService.insertBatch(context.getPoetries().subList(index, length));
-                } else {
-                    data.add(context.getPoetries().subList(index, toIndex));
-                    // poetryService.insertBatch(context.getPoetries().subList(index, toIndex));
-                }
-                index = toIndex;
-            }
-            data.parallelStream().forEach(poetries -> poetryService.insertBatch(poetries));
         }
         return context;
     }
@@ -114,12 +76,5 @@ public class ParserSupport {
             return source;
         }
         return HanLP.convertToSimplifiedChinese(source);
-    }
-
-    public static void main(String[] args) {
-        String data = "靈山話月";
-        ZHConverter converter = ZHConverter.getInstance(ZHConverter.SIMPLIFIED);
-        System.out.println(converter.convert(data));
-        System.out.println(HanLP.convertToSimplifiedChinese(data));
     }
 }
