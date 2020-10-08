@@ -115,6 +115,13 @@
             <artifactId>hanlp</artifactId>
             <version>portable-1.7.8</version>
         </dependency>
+        
+        <dependency>
+            <groupId>#maven.com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>18.0</version>
+            <type>pom</type>
+        </dependency>
     </dependencies>
 
 <!--    <build>
