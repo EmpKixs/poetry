@@ -6,13 +6,14 @@
         <result property="id" column="id" jdbcType="VARCHAR"/>
         <result property="type" column="type" jdbcType="INTEGER"/>
         <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="rhythmic" column="rhythmic" jdbcType="VARCHAR"/>
         <result property="authorId" column="author_id" jdbcType="VARCHAR"/>
         <result property="content" column="content" jdbcType="VARCHAR"/>
         <result property="notes" column="notes" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="PoetryColumns">
-        id, type, title, author_id, content, notes        
+        id, type, title, rhythmic, author_id, content, notes        
     </sql>
 
     <!--通过实体作为筛选条件查询-->
@@ -30,6 +31,9 @@
             </if>
             <if test="title != null and title != ''">
                 AND title = #{title}
+            </if>
+            <if test="rhythmic != null and rhythmic != ''">
+                AND rhythmic = #{rhythmic}
             </if>
             <if test="authorId != null and authorId != ''">
                 AND author_id = #{authorId}
@@ -53,6 +57,9 @@
             <if test="title != null and title != ''">
                 title = #{title},
             </if>
+            <if test="rhythmic != null and rhythmic != ''">
+                rhythmic = #{rhythmic},
+            </if>
             <if test="authorId != null and authorId != ''">
                 author_id = #{authorId},
             </if>
@@ -65,5 +72,13 @@
         </set>
         WHERE id = #{id}
     </update>
+
+    <insert id="insertBatch" parameterType="com.kixs.poetry.entity.Poetry">
+        INSERT INTO poetry.poetry (id, type, title, rhythmic, author_id, content, notes)
+        VALUES
+        <foreach collection="poetryList" index="index" item="item" separator="," open="" close="" >
+            (#{item.id}, #{item.type}, #{item.title}, #{item.rhythmic}, #{item.authorId}, #{item.content}, #{item.notes})
+        </foreach>
+    </insert>
 
 </mapper>

@@ -19,7 +19,6 @@ import org.mybatis.spring.SqlSessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -35,7 +34,7 @@ import java.util.Map;
 public abstract class BaseServiceImpl<M extends BaseMapper<T>, T> implements BaseService<T> {
 
     @Autowired
-    private M baseDao;
+    protected M baseDao;
 
     /**
      * 获取分页对象

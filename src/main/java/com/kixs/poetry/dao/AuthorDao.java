@@ -3,6 +3,7 @@ package com.kixs.poetry.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.kixs.poetry.entity.Author;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -33,5 +34,13 @@ public interface AuthorDao extends BaseMapper<Author> {
      * @return 影响行数
      */
     int update(Author author);
+
+    /**
+     * 批量插入
+     *
+     * @param authors 作者列表
+     * @return 影响行数
+     */
+    int insertBatch(@Param("authors") List<Author> authors);
 
 }

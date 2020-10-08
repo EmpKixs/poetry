@@ -57,16 +57,16 @@ public class ParserSupport {
                 poetry.setTitle(convert(EmojiUtils.replaceEmoji(poetry.getTitle())));
                 poetry.setContent(convert(EmojiUtils.replaceEmoji(poetry.getContent())));
                 poetry.setRhythmic(convert(EmojiUtils.replaceEmoji(poetry.getRhythmic())));
-                poetryService.insert(poetry);
             });
+            poetryService.insertBatch(context.getPoetries(), 1000);
         }
         if (!CollectionUtils.isEmpty(context.getAuthorMap())) {
             context.getAuthorMap().values().parallelStream().forEach(author -> {
                 author.setName(convert(EmojiUtils.replaceEmoji(author.getName())));
                 author.setDescription(convert(EmojiUtils.replaceEmoji(author.getDescription())));
                 author.setShortDescription(convert(EmojiUtils.replaceEmoji(author.getShortDescription())));
-                authorService.insert(author);
             });
+            authorService.insertBatch(context.getAuthorMap().values(), 1000);
         }
         return context;
     }

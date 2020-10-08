@@ -3,6 +3,7 @@ package com.kixs.poetry.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.kixs.poetry.entity.Poetry;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -33,5 +34,13 @@ public interface PoetryDao extends BaseMapper<Poetry> {
      * @return 影响行数
      */
     int update(Poetry poetry);
+
+    /**
+     * 批量插入
+     *
+     * @param poetryList 实例对象列表
+     * @return 影响行数
+     */
+    int insertBatch(@Param("poetryList") List<Poetry> poetryList);
 
 }

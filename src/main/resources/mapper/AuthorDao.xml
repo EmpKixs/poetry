@@ -59,4 +59,12 @@
         WHERE id = #{id}
     </update>
 
+    <insert id="insertBatch" parameterType="com.kixs.poetry.entity.Author">
+        INSERT INTO poetry.author (id, name, dynasty, description, short_description)
+        VALUES
+        <foreach collection="authors" index="index" item="item" open="" separator="," close="">
+            (#{item.id}, #{item.name}, #{item.dynasty}, #{item.description}, #{item.shortDescription})
+        </foreach>
+    </insert>
+
 </mapper>

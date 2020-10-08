@@ -1,10 +1,13 @@
 package com.kixs.poetry.service.impl;
 
+import com.google.common.collect.Lists;
 import com.kixs.poetry.dao.AuthorDao;
 import com.kixs.poetry.entity.Author;
 import com.kixs.poetry.service.AuthorService;
 import com.kixs.poetry.utils.service.impl.BaseServiceImpl;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
 
 /**
  * 诗词经典（历史子集）作者(Author)表服务实现类
@@ -16,4 +19,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthorServiceImpl extends BaseServiceImpl<AuthorDao, Author> implements AuthorService {
 
+    @Override
+    public boolean insertBatch(Collection<Author> entityList, int batchSize) {
+        Lists.partition(Lists.newArrayList(entityList), batchSize)
+                .forEach(values -> this.baseDao.insertBatch(values));
+        return true;
+    }
 }
