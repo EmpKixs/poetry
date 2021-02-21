@@ -67,4 +67,8 @@
         </foreach>
     </insert>
 
+    <select id="queryAuthor" resultMap="AuthorMap">
+        SELECT * FROM poetry.author
+    </select>
+
 </mapper>

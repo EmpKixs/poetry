@@ -54,17 +54,17 @@ public class ParserSupport {
         log.debug("解析数据：作者-{}，诗词-{}", context.getAuthorMap().size(), context.getPoetries().size());
         if (!CollectionUtils.isEmpty(context.getPoetries())) {
             context.getPoetries().parallelStream().forEach(poetry -> {
-                poetry.setTitle(convert(EmojiUtils.replaceEmoji(poetry.getTitle())));
-                poetry.setContent(convert(EmojiUtils.replaceEmoji(poetry.getContent())));
-                poetry.setRhythmic(convert(EmojiUtils.replaceEmoji(poetry.getRhythmic())));
+                poetry.setTitle(convert(poetry.getTitle()));
+                poetry.setContent(convert(poetry.getContent()));
+                poetry.setRhythmic(convert(poetry.getRhythmic()));
             });
             poetryService.insertBatch(context.getPoetries(), 1000);
         }
         if (!CollectionUtils.isEmpty(context.getAuthorMap())) {
             context.getAuthorMap().values().parallelStream().forEach(author -> {
-                author.setName(convert(EmojiUtils.replaceEmoji(author.getName())));
-                author.setDescription(convert(EmojiUtils.replaceEmoji(author.getDescription())));
-                author.setShortDescription(convert(EmojiUtils.replaceEmoji(author.getShortDescription())));
+                author.setName(convert(author.getName()));
+                author.setDescription(convert(author.getDescription()));
+                author.setShortDescription(convert(author.getShortDescription()));
             });
             authorService.insertBatch(context.getAuthorMap().values(), 1000);
         }

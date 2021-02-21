@@ -14,6 +14,12 @@
  Date: 06/10/2020 22:05:17
 */
 
+DROP DATABASE IF EXISTS `poetry`;
+
+CREATE DATABASE `poetry`;
+
+USE `poetry`;
+
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
