@@ -44,7 +44,7 @@ CREATE TABLE `author`  (
 DROP TABLE IF EXISTS `poetry`;
 CREATE TABLE `poetry`  (
    `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键ID',
-   `type` tinyint(3) NULL DEFAULT NULL COMMENT '诗词类型（1-诗，2-词，3-楚辞）',
+   `type` tinyint(3) NULL DEFAULT NULL COMMENT '诗词类型（1-诗，2-词，3-楚辞，4-曲）',
    `title` varchar(520) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '标题',
    `rhythmic` varchar(520) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '词牌名',
    `author_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '作者',

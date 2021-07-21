@@ -21,8 +21,8 @@ public enum ParserEnum {
     SONG_CI(ParserConstant.SONG_CI, "宋词", "ci"),
     TANG_POETRY(ParserConstant.TANG_POETRY, "唐诗", ""),
     WUDAI_HUAJIANJI_POETRY(ParserConstant.WUDAI_HUAJIANJI_POETRY, "五代·花间集", "wudai\\huajianji"),
-    WUDAI_NANTANG_POETRY(ParserConstant.WUDAI_NANTANG_POETRY, "五代·南唐二主词", "wudai\\nantang");
-    // YUAN_QU(ParserConstant.YUAN_QU, "元曲", "yuanqu\\");
+    WUDAI_NANTANG_POETRY(ParserConstant.WUDAI_NANTANG_POETRY, "五代·南唐二主词", "wudai\\nantang"),
+    YUAN_QU(ParserConstant.YUAN_QU, "元曲", "yuanqu\\");
 
     /**
      * 解析器标识

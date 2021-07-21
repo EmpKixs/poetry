@@ -19,7 +19,7 @@ public class PoetryDto implements Serializable {
      */
     private String id;
     /**
-     * 诗词类型（1-诗，2-词，3-楚辞）
+     * 诗词类型（1-诗，2-词，3-楚辞，4-曲）
      */
     private Integer type;
     /**

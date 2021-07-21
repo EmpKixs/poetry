@@ -16,7 +16,9 @@ public enum PoetryType {
 
     CI(2, "词"),
 
-    CHU_CI(3, "楚辞");
+    CHU_CI(3, "楚辞"),
+
+    QU(4, "曲");
 
     private final int code;
 

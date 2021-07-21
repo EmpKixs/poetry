@@ -102,7 +102,7 @@ public class SongParser implements PoetryParser {
     }
 
     public static void main(String[] args) {
-        String filePath = "D:\\Github\\chinese-poetry\\json";
+        String filePath = "D:\\Github\\chinese-poetry";
         SongParser parser = new SongParser();
         parser.parse(filePath);
     }

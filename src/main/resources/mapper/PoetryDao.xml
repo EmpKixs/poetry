@@ -81,10 +81,10 @@
     </update>
 
     <insert id="insertBatch" parameterType="com.kixs.poetry.entity.Poetry">
-        INSERT INTO poetry.poetry (id, type, title, rhythmic, author_id, content, notes)
+        INSERT INTO poetry.poetry (id, type, title, rhythmic, author_id, content, notes, strains)
         VALUES
         <foreach collection="poetryList" index="index" item="item" separator="," open="" close="" >
-            (#{item.id}, #{item.type}, #{item.title}, #{item.rhythmic}, #{item.authorId}, #{item.content}, #{item.notes})
+            (#{item.id}, #{item.type}, #{item.title}, #{item.rhythmic}, #{item.authorId}, #{item.content}, #{item.notes}, #{item.strains})
         </foreach>
     </insert>
     

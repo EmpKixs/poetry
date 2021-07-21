@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.kixs.poetry.constant.ParserConstant;
 import com.kixs.poetry.entity.Author;
 import com.kixs.poetry.entity.Poetry;
+import com.kixs.poetry.enums.PoetryType;
 import com.kixs.poetry.parser.ParseContext;
 import com.kixs.poetry.parser.PoetryParser;
 import com.kixs.poetry.utils.FileUtils;
@@ -27,7 +28,7 @@ public class YuanquParser implements PoetryParser {
 
     @Override
     public String dynasty() {
-        return "元朝";
+        return "元";
     }
 
     @Override
@@ -40,6 +41,7 @@ public class YuanquParser implements PoetryParser {
         poetries.stream().parallel().forEach(qu -> {
             Poetry poetry = new Poetry();
             poetry.setId(IdWorker.getIdStr());
+            poetry.setType(PoetryType.QU.getCode());
             poetry.setTitle(qu.getTitle());
             Author author = context.getAuthor(this::generateDynastyAuthorKey, qu.getAuthor());
             if (Objects.isNull(author)) {
@@ -58,7 +60,7 @@ public class YuanquParser implements PoetryParser {
             poetry.setContent(qu.getParagraphs());
             context.addPoetry(poetry);
         });
-        log.debug("解析数据：作者-{}，诗词-{}", context.getAuthorMap().size(), context.getPoetries().size());
+        log.debug("解析元曲数据：作者-{}，诗词-{}", context.getAuthorMap().size(), context.getPoetries().size());
         return context;
     }
 
