@@ -2,7 +2,6 @@ package com.kixs.poetry.parser;
 
 import com.kixs.poetry.entity.Author;
 import com.kixs.poetry.entity.Poetry;
-import com.kixs.poetry.entity.Strains;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -33,11 +32,6 @@ public class ParseContext {
     private final List<Poetry> poetries = Collections.synchronizedList(new ArrayList<>());
 
     /**
-     * 韵律集合
-     */
-    private final List<Strains> strainsList = Collections.synchronizedList(new ArrayList<>());
-
-    /**
      * 添加作者
      *
      * @param author 作者信息
@@ -66,15 +60,6 @@ public class ParseContext {
     }
 
     /**
-     * 新增韵律
-     *
-     * @param strains 韵律信息
-     */
-    public void addStrains(Strains strains) {
-        strainsList.add(strains);
-    }
-
-    /**
      * 其它上下文加入当前上下文
      *
      * @param other 其它上下文
@@ -82,6 +67,5 @@ public class ParseContext {
     public void add(ParseContext other) {
         this.authorMap.putAll(other.getAuthorMap());
         this.poetries.addAll(other.poetries);
-        this.strainsList.addAll(other.strainsList);
     }
 }

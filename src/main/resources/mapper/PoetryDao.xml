@@ -10,10 +10,11 @@
         <result property="authorId" column="author_id" jdbcType="VARCHAR"/>
         <result property="content" column="content" jdbcType="VARCHAR"/>
         <result property="notes" column="notes" jdbcType="VARCHAR"/>
+        <result property="strains" column="strains" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="PoetryColumns">
-        id, type, title, rhythmic, author_id, content, notes        
+        id, type, title, rhythmic, author_id, content, notes, strains
     </sql>
 
     <!--通过实体作为筛选条件查询-->
@@ -44,11 +45,14 @@
             <if test="notes != null and notes != ''">
                 AND notes = #{notes}
             </if>
+            <if test="strains != null and strains != ''">
+                AND strains = #{strains}
+            </if>
         </where>
     </select>
 
     <!--通过主键修改数据-->
-    <update id="update">
+    <update id="updateEntity">
         UPDATE poetry.poetry
         <set>
             <if test="type != null">
@@ -69,6 +73,9 @@
             <if test="notes != null and notes != ''">
                 notes = #{notes},
             </if>
+            <if test="strains != null and strains != ''">
+                strains = #{strains},
+            </if>
         </set>
         WHERE id = #{id}
     </update>
@@ -80,5 +87,15 @@
             (#{item.id}, #{item.type}, #{item.title}, #{item.rhythmic}, #{item.authorId}, #{item.content}, #{item.notes})
         </foreach>
     </insert>
+    
+    <select id="pagePoetryDto" resultType="com.kixs.poetry.dto.PoetryDto">
+        SELECT
+            p.*,
+            a.name AS authorName,
+            a.dynasty AS authorDynasty
+        FROM poetry p
+        LEFT JOIN author a ON p.author_id = a.id
+        LIMIT #{offset}, #{pageSize}
+    </select>
 
 </mapper>

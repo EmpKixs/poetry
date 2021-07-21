@@ -6,12 +6,14 @@
         <result property="id" column="id" jdbcType="VARCHAR"/>
         <result property="name" column="name" jdbcType="VARCHAR"/>
         <result property="dynasty" column="dynasty" jdbcType="VARCHAR"/>
+        <result property="birthDate" column="birth_date" jdbcType="VARCHAR"/>
+        <result property="obitDate" column="obit_date" jdbcType="VARCHAR"/>
         <result property="description" column="description" jdbcType="VARCHAR"/>
         <result property="shortDescription" column="short_description" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="AuthorColumns">
-        id, name, dynasty, description, short_description        
+        id, name, dynasty, birth_date, obit_date, description, short_description
     </sql>
 
     <!--通过实体作为筛选条件查询-->
@@ -30,6 +32,12 @@
             <if test="dynasty != null and dynasty != ''">
                 AND dynasty = #{dynasty}
             </if>
+            <if test="birthDate != null and birthDate != ''">
+                AND birth_date = #{birthDate}
+            </if>
+            <if test="obitDate != null and obitDate != ''">
+                AND obit_date = #{obitDate}
+            </if>
             <if test="description != null and description != ''">
                 AND description = #{description}
             </if>
@@ -40,7 +48,7 @@
     </select>
 
     <!--通过主键修改数据-->
-    <update id="update">
+    <update id="updateEntity">
         UPDATE poetry.author
         <set>
             <if test="name != null and name != ''">
@@ -48,6 +56,12 @@
             </if>
             <if test="dynasty != null and dynasty != ''">
                 dynasty = #{dynasty},
+            </if>
+            <if test="birthDate != null and birthDate != ''">
+                birth_date = #{birthDate},
+            </if>
+            <if test="obitDate != null and obitDate != ''">
+                obit_date = #{obitDate},
             </if>
             <if test="description != null and description != ''">
                 description = #{description},
@@ -60,10 +74,10 @@
     </update>
 
     <insert id="insertBatch" parameterType="com.kixs.poetry.entity.Author">
-        INSERT INTO poetry.author (id, name, dynasty, description, short_description)
+        INSERT INTO poetry.author (id, name, dynasty, birth_date, obit_date, description, short_description)
         VALUES
         <foreach collection="authors" index="index" item="item" open="" separator="," close="">
-            (#{item.id}, #{item.name}, #{item.dynasty}, #{item.description}, #{item.shortDescription})
+            (#{item.id}, #{item.name}, #{item.dynasty}, #{item.birthDate}, #{item.obitDate}, #{item.description}, #{item.shortDescription})
         </foreach>
     </insert>
 

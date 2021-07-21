@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.kixs.poetry.constant.ParserConstant;
 import com.kixs.poetry.entity.Author;
 import com.kixs.poetry.entity.Poetry;
+import com.kixs.poetry.enums.PoetryType;
 import com.kixs.poetry.parser.ParseContext;
 import com.kixs.poetry.parser.PoetryParser;
 import com.kixs.poetry.utils.FileUtils;
@@ -17,7 +18,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 /**
- * 宋诗词解析
+ * 曹操诗词解析
  *
  * @author suyixing
  * @version v1.0.0
@@ -29,7 +30,7 @@ public class CaocaoParser implements PoetryParser {
 
     @Override
     public String dynasty() {
-        return "唐朝";
+        return "东汉";
     }
 
     @Override
@@ -51,6 +52,7 @@ public class CaocaoParser implements PoetryParser {
                 poetries.stream().parallel().forEach(poet -> {
                     Poetry poetry = new Poetry();
                     poetry.setId(IdWorker.getIdStr());
+                    poetry.setType(PoetryType.SHI.getCode());
                     poetry.setTitle(poet.getTitle());
                     poetry.setAuthorId(author.getId());
                     poetry.setContent(poet.getParagraphs());
@@ -58,7 +60,7 @@ public class CaocaoParser implements PoetryParser {
                 });
             });
         }
-        log.debug("解析数据：作者-{}，诗词-{}", context.getAuthorMap().size(), context.getPoetries().size());
+        log.debug("解析曹操诗词数据：作者-{}，诗词-{}", context.getAuthorMap().size(), context.getPoetries().size());
         return context;
     }
 

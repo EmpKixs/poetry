@@ -4,8 +4,6 @@ import com.hankcs.hanlp.HanLP;
 import com.kixs.poetry.enums.ParserEnum;
 import com.kixs.poetry.service.AuthorService;
 import com.kixs.poetry.service.PoetryService;
-import com.kixs.poetry.service.StrainsService;
-import com.kixs.poetry.utils.EmojiUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,9 +33,6 @@ public class ParserSupport {
     @Resource
     private AuthorService authorService;
 
-    @Resource
-    private StrainsService strainsService;
-
     @Transactional(rollbackFor = Exception.class)
     public ParseContext parse(String baseDir) {
         ParseContext context = new ParseContext();
@@ -57,6 +52,7 @@ public class ParserSupport {
                 poetry.setTitle(convert(poetry.getTitle()));
                 poetry.setContent(convert(poetry.getContent()));
                 poetry.setRhythmic(convert(poetry.getRhythmic()));
+                poetry.setNotes(convert(poetry.getNotes()));
             });
             poetryService.insertBatch(context.getPoetries(), 1000);
         }

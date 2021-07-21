@@ -1,6 +1,7 @@
 package com.kixs.poetry.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.kixs.poetry.dto.PoetryDto;
 import com.kixs.poetry.entity.Poetry;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -33,7 +34,7 @@ public interface PoetryDao extends BaseMapper<Poetry> {
      * @param poetry 实例对象
      * @return 影响行数
      */
-    int update(Poetry poetry);
+    int updateEntity(Poetry poetry);
 
     /**
      * 批量插入
@@ -42,5 +43,14 @@ public interface PoetryDao extends BaseMapper<Poetry> {
      * @return 影响行数
      */
     int insertBatch(@Param("poetryList") List<Poetry> poetryList);
+
+    /**
+     * 分页查询诗词数据
+     *
+     * @param offset   偏移量
+     * @param pageSize 每页大小
+     * @return 查询结果
+     */
+    List<PoetryDto> pagePoetryDto(@Param("offset") int offset, @Param("pageSize") int pageSize);
 
 }

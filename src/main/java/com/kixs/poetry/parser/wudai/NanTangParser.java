@@ -5,12 +5,14 @@ import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.kixs.poetry.constant.ParserConstant;
 import com.kixs.poetry.entity.Author;
 import com.kixs.poetry.entity.Poetry;
+import com.kixs.poetry.enums.PoetryType;
 import com.kixs.poetry.parser.ParseContext;
 import com.kixs.poetry.parser.PoetryParser;
 import com.kixs.poetry.parser.songci.SongCi;
 import com.kixs.poetry.parser.songci.SongCiAuthor;
 import com.kixs.poetry.utils.FileUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -58,16 +60,21 @@ public class NanTangParser implements PoetryParser {
             Poetry poetry = new Poetry();
             poetry.setId(IdWorker.getIdStr());
             poetry.setTitle(wudai.getTitle());
+            poetry.setType(PoetryType.CI.getCode());
             poetry.setRhythmic(wudai.getRhythmic());
-            Author author = context.getAuthor(this::generateDynastyAuthorKey, wudai.getAuthor());
-            if (Objects.nonNull(author)) {
-                poetry.setAuthorId(author.getId());
+            if (StringUtils.isNotBlank(wudai.getAuthor())) {
+                Author author = context.getAuthor(this::generateDynastyAuthorKey, wudai.getAuthor());
+                if (Objects.nonNull(author)) {
+                    poetry.setAuthorId(author.getId());
+                } else {
+                    poetry.setNotes("##" + wudai.getAuthor() + "，此作者未在作者列表中查询到##");
+                }
             }
             poetry.setContent(wudai.getParagraphs());
             poetry.setNotes(wudai.getNotes());
             context.addPoetry(poetry);
         });
-        log.debug("解析数据：作者-{}，诗词-{}", context.getAuthorMap().size(), context.getPoetries().size());
+        log.debug("解析五代诗词-南唐二主词数据：作者-{}，诗词-{}", context.getAuthorMap().size(), context.getPoetries().size());
         return context;
     }
 

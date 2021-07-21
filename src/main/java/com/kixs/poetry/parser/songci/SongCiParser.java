@@ -5,16 +5,19 @@ import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.kixs.poetry.constant.ParserConstant;
 import com.kixs.poetry.entity.Author;
 import com.kixs.poetry.entity.Poetry;
+import com.kixs.poetry.enums.PoetryType;
 import com.kixs.poetry.parser.ParseContext;
 import com.kixs.poetry.parser.PoetryParser;
 import com.kixs.poetry.utils.FileUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -29,7 +32,7 @@ import java.util.stream.Stream;
 public class SongCiParser implements PoetryParser {
     @Override
     public String dynasty() {
-        return "宋朝";
+        return "宋";
     }
 
     @Override
@@ -58,18 +61,23 @@ public class SongCiParser implements PoetryParser {
                 poetries.stream().parallel().forEach(song -> {
                     Poetry poetry = new Poetry();
                     poetry.setId(IdWorker.getIdStr());
+                    poetry.setType(PoetryType.CI.getCode());
                     poetry.setTitle(song.getRhythmic());
                     poetry.setRhythmic(song.getRhythmic());
-                    Author author = context.getAuthor(this::generateDynastyAuthorKey, song.getAuthor());
-                    if (Objects.nonNull(author)) {
-                        poetry.setAuthorId(author.getId());
+                    if (StringUtils.isNotBlank(song.getAuthor())) {
+                        Author author = context.getAuthor(this::generateDynastyAuthorKey, song.getAuthor());
+                        if (Objects.nonNull(author)) {
+                            poetry.setAuthorId(author.getId());
+                        } else {
+                            poetry.setNotes("##" + song.getAuthor() + "，此作者未在作者列表中查询到##");
+                        }
                     }
                     poetry.setContent(song.getParagraphs());
                     context.addPoetry(poetry);
                 });
             });
         }
-        log.debug("解析数据：作者-{}，诗词-{}", context.getAuthorMap().size(), context.getPoetries().size());
+        log.debug("解析宋词数据：作者-{}，诗词-{}", context.getAuthorMap().size(), context.getPoetries().size());
         return context;
     }
 

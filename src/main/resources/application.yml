@@ -30,7 +30,7 @@ spring:
       test-on-return: false
       test-while-idle: true
       time-between-eviction-runs-millis: 60000
-      url: jdbc:mysql://192.168.0.108:3306/poetry?characterEncoding=utf8&useSSL=false&zeroDateTimeBehavior=convertToNull
+      url: jdbc:mysql://127.0.0.1:3306/poetry?characterEncoding=utf8&useSSL=false&zeroDateTimeBehavior=convertToNull
       username: root
       password: root
   jackson:

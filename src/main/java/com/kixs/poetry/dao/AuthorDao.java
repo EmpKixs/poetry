@@ -1,8 +1,6 @@
 package com.kixs.poetry.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kixs.poetry.entity.Author;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -35,7 +33,7 @@ public interface AuthorDao extends BaseMapper<Author> {
      * @param author 实例对象
      * @return 影响行数
      */
-    int update(Author author);
+    int updateEntity(Author author);
 
     /**
      * 批量插入

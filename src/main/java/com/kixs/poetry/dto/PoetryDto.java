@@ -1,21 +1,19 @@
-package com.kixs.poetry.entity;
+package com.kixs.poetry.dto;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
 
 /**
- * 诗歌(Poetry)实体类
+ * 诗词Dto
  *
  * @author kixs
  * @version v1.0.0
- * @since 2020/8/18 23:29
+ * @since 2021/7/21 16:34
  */
 @Data
-@TableName("poetry")
-public class Poetry implements Serializable {
-    private static final long serialVersionUID = -98212766921806597L;
+public class PoetryDto implements Serializable {
+
     /**
      * 主键ID
      */
@@ -33,9 +31,17 @@ public class Poetry implements Serializable {
      */
     private String rhythmic;
     /**
-     * 作者
+     * 作者ID
      */
     private String authorId;
+    /**
+     * 作者姓名
+     */
+    private String authorName;
+    /**
+     * 作者朝代
+     */
+    private String authorDynasty;
     /**
      * 内容
      */
@@ -48,5 +54,4 @@ public class Poetry implements Serializable {
      * 诗词中韵律/声调/格律
      */
     private String strains;
-
 }

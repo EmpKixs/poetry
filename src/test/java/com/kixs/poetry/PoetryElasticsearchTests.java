@@ -3,15 +3,14 @@ package com.kixs.poetry;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kixs.poetry.config.PoetryProperties;
 import com.kixs.poetry.dao.PoetryDao;
+import com.kixs.poetry.dto.PoetryDto;
 import com.kixs.poetry.entity.Author;
 import com.kixs.poetry.entity.Poetry;
 import com.kixs.poetry.parser.ParserSupport;
 import com.kixs.poetry.service.AuthorService;
 import com.kixs.poetry.service.PoetryService;
-import org.assertj.core.util.Lists;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
@@ -35,7 +34,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.stream.Stream;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -59,13 +58,11 @@ public class PoetryElasticsearchTests {
     @Resource
     private RestHighLevelClient restHighLevelClient;
 
-    ThreadPoolExecutor
-
     @Test
     public void createIndexTest() throws IOException {
         // 1. 创建索引请求
-        // CreateIndexRequest firstIndex = new CreateIndexRequest("poetry_author");
-        CreateIndexRequest firstIndex = new CreateIndexRequest("poetry");
+        CreateIndexRequest firstIndex = new CreateIndexRequest("author");
+        // CreateIndexRequest firstIndex = new CreateIndexRequest("poetry");
 
         // 2. 客户端执行创建索引的请求
         CreateIndexResponse response = restHighLevelClient.indices().create(firstIndex, RequestOptions.DEFAULT);
@@ -118,7 +115,7 @@ public class PoetryElasticsearchTests {
         // 2. 将多条数据批量的放入bulkRequest中
         for (int i = 0; i < authors.size(); i++) {
             // 批量更新和批量删除在这里修改对应的请求即可
-            bulkRequest.add(new IndexRequest("poetry_author")
+            bulkRequest.add(new IndexRequest("author")
                     .id(authors.get(i).getId())
                     .source(JSON.toJSONString(authors.get(i)), XContentType.JSON)
             );
@@ -136,36 +133,40 @@ public class PoetryElasticsearchTests {
         LambdaQueryWrapper<Poetry> wrapper = new LambdaQueryWrapper<>();
         int count = poetryDao.selectCount(wrapper);
 
-        int pageSize = 500;
-        int pageNo = 1;
-        int sumCount = 0;
+        int pageSize = 2000;
 
-        do {
-            IPage<Poetry> page = poetryDao.selectPage(new Page<>(pageNo, pageSize), wrapper);
-            if (page.getRecords().size() > 0) {
-                // 1. 创建批量的请求
-                BulkRequest bulkRequest = new BulkRequest();
-                // 设置超时时间
-                bulkRequest.timeout("100s");
-                // 批量更新和批量删除在这里修改对应的请求即可
-                // 2. 将多条数据批量的放入bulkRequest中
-                page.getRecords().forEach(poetry ->
-                        bulkRequest.add(new IndexRequest("poetry")
-                                .id(poetry.getId())
-                                .source(JSON.toJSONString(poetry), XContentType.JSON)
-                        ));
-                // 3. 执行批量创建文档
-                BulkResponse responses = restHighLevelClient.bulk(bulkRequest, RequestOptions.DEFAULT);
-                System.out.println(responses.hasFailures() + "\t" + page.getRecords().size());
-            }
-            pageNo++;
-            sumCount += pageSize;
-        } while (count >= sumCount);
+        Stream.iterate(1, page -> page + 1)
+                .limit(count / pageSize + 1)
+                .parallel()
+                .forEach(pageNo -> {
+                    int offset = pageNo > 0 ? (pageNo - 1) * pageSize : 0;
+                    List<PoetryDto> page = poetryDao.pagePoetryDto(offset, pageSize);
+                    if (page.size() > 0) {
+                        // 1. 创建批量的请求
+                        BulkRequest bulkRequest = new BulkRequest();
+                        // 设置超时时间
+                        bulkRequest.timeout("100s");
+                        // 批量更新和批量删除在这里修改对应的请求即可
+                        // 2. 将多条数据批量的放入bulkRequest中
+                        page.forEach(poetry ->
+                                bulkRequest.add(new IndexRequest("poetry")
+                                        .id(poetry.getId())
+                                        .source(JSON.toJSONString(poetry), XContentType.JSON)
+                                ));
+                        // 3. 执行批量创建文档
+                        try {
+                            BulkResponse responses = restHighLevelClient.bulk(bulkRequest, RequestOptions.DEFAULT);
+                            System.out.println(responses.hasFailures() + "\t" + page.size());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
     }
 
     @Test
     public void readTest() throws IOException {
-        SearchRequest request = new SearchRequest("poetry_author");
+        SearchRequest request = new SearchRequest("author");
         System.out.println(request);
         SearchSourceBuilder builder = new SearchSourceBuilder();
         builder.query(QueryBuilders.termQuery("id", "1332698485254205441"));
