@@ -2,7 +2,9 @@ package com.kixs.poetry.parser;
 
 import com.hankcs.hanlp.HanLP;
 import com.kixs.poetry.enums.ParserEnum;
+import com.kixs.poetry.service.ArticleService;
 import com.kixs.poetry.service.AuthorService;
+import com.kixs.poetry.service.BookService;
 import com.kixs.poetry.service.PoetryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -33,6 +35,12 @@ public class ParserSupport {
     @Resource
     private AuthorService authorService;
 
+    @Resource
+    private BookService bookService;
+
+    @Resource
+    private ArticleService articleService;
+
     @Transactional(rollbackFor = Exception.class)
     public ParseContext parse(String baseDir) {
         ParseContext context = new ParseContext();
@@ -46,15 +54,16 @@ public class ParserSupport {
             String path = baseDir + parser.getDir();
             context.add(poetryParser.parse(path));
         }
-        log.debug("解析数据：作者-{}，诗词-{}", context.getAuthorMap().size(), context.getPoetries().size());
-        if (!CollectionUtils.isEmpty(context.getPoetries())) {
-            context.getPoetries().parallelStream().forEach(poetry -> {
+        log.debug("解析数据：作者-{}，诗词-{}，典籍-{}，文章-{}",
+                context.getAuthorMap().size(), context.getPoetryList().size(), context.getBooks().size(), context.getArticles().size());
+        if (!CollectionUtils.isEmpty(context.getPoetryList())) {
+            context.getPoetryList().parallelStream().forEach(poetry -> {
                 poetry.setTitle(convert(poetry.getTitle()));
                 poetry.setContent(convert(poetry.getContent()));
                 poetry.setRhythmic(convert(poetry.getRhythmic()));
                 poetry.setNotes(convert(poetry.getNotes()));
             });
-            poetryService.insertBatch(context.getPoetries(), 1000);
+            poetryService.insertBatch(context.getPoetryList(), 1000);
         }
         if (!CollectionUtils.isEmpty(context.getAuthorMap())) {
             context.getAuthorMap().values().parallelStream().forEach(author -> {
@@ -63,6 +72,23 @@ public class ParserSupport {
                 author.setShortDescription(convert(author.getShortDescription()));
             });
             authorService.insertBatch(context.getAuthorMap().values(), 1000);
+        }
+        if (!CollectionUtils.isEmpty(context.getBooks())) {
+            context.getBooks().parallelStream().forEach(book -> {
+                book.setName(convert(book.getName()));
+                book.setIntroduction(convert(book.getIntroduction()));
+            });
+            bookService.insertBatch(context.getBooks(), 1000);
+        }
+        if (!CollectionUtils.isEmpty(context.getArticles())) {
+            context.getArticles().parallelStream().forEach(article -> {
+                article.setVolume(convert(article.getVolume()));
+                article.setSection(convert(article.getSection()));
+                article.setTitle(convert(article.getTitle()));
+                article.setContent(convert(article.getContent()));
+                article.setNotes(convert(article.getNotes()));
+            });
+            articleService.insertBatch(context.getArticles(), 500);
         }
         return context;
     }

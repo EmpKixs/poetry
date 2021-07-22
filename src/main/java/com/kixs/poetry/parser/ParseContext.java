@@ -1,8 +1,11 @@
 package com.kixs.poetry.parser;
 
+import com.kixs.poetry.entity.Article;
 import com.kixs.poetry.entity.Author;
+import com.kixs.poetry.entity.Book;
 import com.kixs.poetry.entity.Poetry;
 import lombok.Getter;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,7 +32,17 @@ public class ParseContext {
     /**
      * 诗词集合
      */
-    private final List<Poetry> poetries = Collections.synchronizedList(new ArrayList<>());
+    private final List<Poetry> poetryList = Collections.synchronizedList(new ArrayList<>());
+
+    /**
+     * 典籍集合
+     */
+    private final List<Book> books = Collections.synchronizedList(new ArrayList<>());
+
+    /**
+     * 文章集合
+     */
+    private final List<Article> articles = Collections.synchronizedList(new ArrayList<>());
 
     /**
      * 添加作者
@@ -56,7 +69,25 @@ public class ParseContext {
      * @param poetry 诗词信息
      */
     public void addPoetry(Poetry poetry) {
-        poetries.add(poetry);
+        poetryList.add(poetry);
+    }
+
+    /**
+     * 新增典籍
+     *
+     * @param book 典籍信息
+     */
+    public void addBook(Book book) {
+        books.add(book);
+    }
+
+    /**
+     * 新增文章
+     *
+     * @param article 文章信息
+     */
+    public void addArticle(Article article) {
+        articles.add(article);
     }
 
     /**
@@ -65,7 +96,18 @@ public class ParseContext {
      * @param other 其它上下文
      */
     public void add(ParseContext other) {
-        this.authorMap.putAll(other.getAuthorMap());
-        this.poetries.addAll(other.poetries);
+        if (!CollectionUtils.isEmpty(other.getAuthorMap())) {
+            this.authorMap.putAll(other.getAuthorMap());
+        }
+        if (!CollectionUtils.isEmpty(other.poetryList)) {
+            this.poetryList.addAll(other.poetryList);
+        }
+        if (!CollectionUtils.isEmpty(other.books)) {
+            this.books.addAll(other.books);
+        }
+        if (!CollectionUtils.isEmpty(other.articles)) {
+            this.articles.addAll(other.articles);
+        }
+
     }
 }

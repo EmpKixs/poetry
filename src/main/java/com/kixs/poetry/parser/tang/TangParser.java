@@ -8,7 +8,6 @@ import com.kixs.poetry.entity.Poetry;
 import com.kixs.poetry.enums.PoetryType;
 import com.kixs.poetry.parser.ParseContext;
 import com.kixs.poetry.parser.PoetryParser;
-import com.kixs.poetry.parser.song.SongStrains;
 import com.kixs.poetry.utils.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -98,7 +97,7 @@ public class TangParser implements PoetryParser {
                 });
             });
         }
-        log.debug("解析唐诗词数据：作者-{}，诗词-{}", context.getAuthorMap().size(), context.getPoetries().size());
+        log.debug("解析唐诗词数据：作者-{}，诗词-{}", context.getAuthorMap().size(), context.getPoetryList().size());
         return context;
     }
 

@@ -17,7 +17,6 @@ import java.io.File;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -77,7 +76,7 @@ public class SongCiParser implements PoetryParser {
                 });
             });
         }
-        log.debug("解析宋词数据：作者-{}，诗词-{}", context.getAuthorMap().size(), context.getPoetries().size());
+        log.debug("解析宋词数据：作者-{}，诗词-{}", context.getAuthorMap().size(), context.getPoetryList().size());
         return context;
     }
 

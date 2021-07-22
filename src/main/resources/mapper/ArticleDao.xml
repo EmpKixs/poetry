@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kixs.poetry.dao.ArticleDao">
+
+    <resultMap type="com.kixs.poetry.entity.Article" id="ArticleMap">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="bookId" column="book_id" jdbcType="VARCHAR"/>
+        <result property="volume" column="volume" jdbcType="VARCHAR"/>
+        <result property="volumeSort" column="volume_sort" jdbcType="INTEGER"/>
+        <result property="section" column="section" jdbcType="VARCHAR"/>
+        <result property="sectionSort" column="section_sort" jdbcType="INTEGER"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="sort" column="sort" jdbcType="INTEGER"/>
+        <result property="authorId" column="author_id" jdbcType="VARCHAR"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="notes" column="notes" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="ArticleColumns">
+        id, book_id, volume, volume_sort, section, section_sort, title, sort, author_id, content, notes
+    </sql>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="ArticleMap">
+        SELECT
+        <include refid="ArticleColumns"/>
+
+        FROM poetry.article
+        <where>
+            <if test="id != null and id != ''">
+                AND id = #{id}
+            </if>
+            <if test="bookId != null and bookId != ''">
+                AND book_id = #{bookId}
+            </if>
+            <if test="volume != null and volume != ''">
+                AND volume = #{volume}
+            </if>
+            <if test="volumeSort != null">
+                AND volume_sort = #{volumeSort}
+            </if>
+            <if test="section != null and section != ''">
+                AND section = #{section}
+            </if>
+            <if test="sectionSort != null">
+                AND section_sort = #{sectionSort}
+            </if>
+            <if test="title != null and title != ''">
+                AND title = #{title}
+            </if>
+            <if test="sort != null">
+                AND sort = #{sort}
+            </if>
+            <if test="authorId != null and authorId != ''">
+                AND author_id = #{authorId}
+            </if>
+            <if test="content != null and content != ''">
+                AND content = #{content}
+            </if>
+            <if test="notes != null and notes != ''">
+                AND notes = #{notes}
+            </if>
+        </where>
+    </select>
+
+    <!--通过主键修改数据-->
+    <update id="updateEntity">
+        UPDATE poetry.article
+        <set>
+            <if test="bookId != null and bookId != ''">
+                book_id = #{bookId},
+            </if>
+            <if test="volume != null and volume != ''">
+                volume = #{volume},
+            </if>
+            <if test="volumeSort != null">
+                volume_sort = #{volumeSort},
+            </if>
+            <if test="section != null and section != ''">
+                section = #{section},
+            </if>
+            <if test="sectionSort != null">
+                section_sort = #{sectionSort},
+            </if>
+            <if test="title != null and title != ''">
+                title = #{title},
+            </if>
+            <if test="sort != null">
+                sort = #{sort},
+            </if>
+            <if test="authorId != null and authorId != ''">
+                author_id = #{authorId},
+            </if>
+            <if test="content != null and content != ''">
+                content = #{content},
+            </if>
+            <if test="notes != null and notes != ''">
+                notes = #{notes},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <insert id="insertBatch" parameterType="com.kixs.poetry.entity.Poetry">
+        INSERT INTO poetry.article (id, book_id, volume, volume_sort, section, section_sort, title, sort, author_id, content, notes)
+        VALUES
+        <foreach collection="articles" index="index" item="item" separator="," open="" close="" >
+            (#{item.id}, #{item.bookId}, #{item.volume}, #{item.volumeSort}, #{item.section}, #{item.sectionSort}, #{item.title}, #{item.sort}, #{item.authorId}, #{item.content}, #{item.notes})
+        </foreach>
+    </insert>
+
+</mapper>

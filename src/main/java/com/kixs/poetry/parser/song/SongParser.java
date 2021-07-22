@@ -97,7 +97,7 @@ public class SongParser implements PoetryParser {
                 });
             });
         }
-        log.debug("解析宋诗数据：作者-{}，诗词-{}", context.getAuthorMap().size(), context.getPoetries().size());
+        log.debug("解析宋诗数据：作者-{}，诗词-{}", context.getAuthorMap().size(), context.getPoetryList().size());
         return context;
     }
 

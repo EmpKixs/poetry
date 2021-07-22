@@ -43,4 +43,14 @@ public interface ParserConstant {
      * 元曲
      */
     String YUAN_QU = "yuan_qu";
+
+    /**
+     * 楚辞
+     */
+    String CHU_CI = "chu_ci";
+
+    /**
+     * 蒙学
+     */
+    String MENGXUE = "mengxue";
 }

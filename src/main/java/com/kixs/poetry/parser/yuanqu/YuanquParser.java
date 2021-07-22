@@ -60,7 +60,7 @@ public class YuanquParser implements PoetryParser {
             poetry.setContent(qu.getParagraphs());
             context.addPoetry(poetry);
         });
-        log.debug("解析元曲数据：作者-{}，诗词-{}", context.getAuthorMap().size(), context.getPoetries().size());
+        log.debug("解析元曲数据：作者-{}，诗词-{}", context.getAuthorMap().size(), context.getPoetryList().size());
         return context;
     }
 

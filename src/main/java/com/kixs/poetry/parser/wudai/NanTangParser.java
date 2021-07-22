@@ -8,18 +8,13 @@ import com.kixs.poetry.entity.Poetry;
 import com.kixs.poetry.enums.PoetryType;
 import com.kixs.poetry.parser.ParseContext;
 import com.kixs.poetry.parser.PoetryParser;
-import com.kixs.poetry.parser.songci.SongCi;
-import com.kixs.poetry.parser.songci.SongCiAuthor;
 import com.kixs.poetry.utils.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.util.List;
 import java.util.Objects;
-import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 /**
  * 五代诗词-南唐二主词解析
@@ -74,7 +69,7 @@ public class NanTangParser implements PoetryParser {
             poetry.setNotes(wudai.getNotes());
             context.addPoetry(poetry);
         });
-        log.debug("解析五代诗词-南唐二主词数据：作者-{}，诗词-{}", context.getAuthorMap().size(), context.getPoetries().size());
+        log.debug("解析五代诗词-南唐二主词数据：作者-{}，诗词-{}", context.getAuthorMap().size(), context.getPoetryList().size());
         return context;
     }
 
