@@ -6,12 +6,13 @@
         <result property="id" column="id" jdbcType="VARCHAR"/>
         <result property="name" column="name" jdbcType="VARCHAR"/>
         <result property="authorId" column="author_id" jdbcType="VARCHAR"/>
-        <result property="introduction" column="introduction" jdbcType="VARCHAR"/>
         <result property="tag" column="tag" jdbcType="VARCHAR"/>
+        <result property="introduction" column="introduction" jdbcType="VARCHAR"/>
+        <result property="preface" column="preface" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="BookColumns">
-        id, name, author_id, introduction, tag
+        id, name, author_id, tag, introduction, preface
     </sql>
 
     <!--通过实体作为筛选条件查询-->
@@ -30,11 +31,14 @@
             <if test="authorId != null and authorId != ''">
                 AND author_id = #{authorId}
             </if>
+            <if test="tag != null and tag != ''">
+                AND tag = #{tag}
+            </if>
             <if test="introduction != null and introduction != ''">
                 AND introduction = #{introduction}
             </if>
-            <if test="tag != null and tag != ''">
-                AND tag = #{tag}
+            <if test="preface != null and preface != ''">
+                AND preface = #{preface}
             </if>
         </where>
     </select>
@@ -49,11 +53,14 @@
             <if test="authorId != null and authorId != ''">
                 author_id = #{authorId},
             </if>
+            <if test="tag != null and tag != ''">
+                tag = #{tag},
+            </if>
             <if test="introduction != null and introduction != ''">
                 introduction = #{introduction},
             </if>
-            <if test="tag != null and tag != ''">
-                tag = #{tag},
+            <if test="preface != null and preface != ''">
+                preface = #{preface},
             </if>
         </set>
         WHERE id = #{id}

@@ -1,6 +1,7 @@
 package com.kixs.poetry.parser.mengxue;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.kixs.poetry.constant.ParserConstant;
 import com.kixs.poetry.entity.Article;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 /**
  * 蒙学解析
@@ -75,7 +75,7 @@ public class MengxueParser implements PoetryParser {
         String pattern = "^baijiaxing.json$";
         File[] files = FileUtils.listDirectoryFiles(filePath, (dir, filename) -> Pattern.matches(pattern, filename));
         if (files != null && files.length > 0) {
-            Stream.of(files).forEach(file -> {
+            for (File file : files) {
                 String data = FileUtils.read(file);
                 Baijiaxing baijiaxing = JSON.parseObject(data, Baijiaxing.class);
                 // 作者解析
@@ -102,7 +102,7 @@ public class MengxueParser implements PoetryParser {
                 article.setNotes(baijiaxing.originConvert());
                 context.addArticle(article);
 
-            });
+            }
         }
     }
 
@@ -115,7 +115,7 @@ public class MengxueParser implements PoetryParser {
         String pattern = "^dizigui.json$";
         File[] files = FileUtils.listDirectoryFiles(filePath, (dir, filename) -> Pattern.matches(pattern, filename));
         if (files != null && files.length > 0) {
-            Stream.of(files).forEach(file -> {
+            for (File file : files) {
                 String data = FileUtils.read(file);
                 Dizigui dizigui = JSON.parseObject(data, Dizigui.class);
                 // 作者解析
@@ -130,16 +130,18 @@ public class MengxueParser implements PoetryParser {
                 book.setAuthorId(author.getId());
                 book.setTag(ParserEnum.MENGXUE.getDesc());
                 context.addBook(book);
-                dizigui.getContent().stream().parallel().forEach(e -> {
+                for (int i = 0; i < dizigui.getContent().size(); i++) {
+                    Dizigui.Content content = dizigui.getContent().get(i);
                     Article article = new Article();
                     article.setId(IdWorker.getIdStr());
                     article.setBookId(book.getId());
-                    article.setTitle(e.getChapter());
+                    article.setTitle(content.getChapter());
+                    article.setSort(i);
                     article.setAuthorId(author.getId());
-                    article.setContent(e.getParagraphs());
+                    article.setContent(content.getParagraphs());
                     context.addArticle(article);
-                });
-            });
+                }
+            }
         }
     }
 
@@ -170,7 +172,7 @@ public class MengxueParser implements PoetryParser {
         String pattern = "^qianziwen.json$";
         File[] files = FileUtils.listDirectoryFiles(filePath, (dir, filename) -> Pattern.matches(pattern, filename));
         if (files != null && files.length > 0) {
-            Stream.of(files).forEach(file -> {
+            for (File file : files) {
                 String data = FileUtils.read(file);
                 Qianziwen qianziwen = JSON.parseObject(data, Qianziwen.class);
                 // 作者解析
@@ -194,7 +196,7 @@ public class MengxueParser implements PoetryParser {
                 article.setContent(qianziwen.getParagraphs());
                 article.setNotes(qianziwen.getSpells());
                 context.addArticle(article);
-            });
+            }
         }
     }
 
@@ -218,7 +220,7 @@ public class MengxueParser implements PoetryParser {
 
         File[] files = FileUtils.listDirectoryFiles(filePath, (dir, filename) -> Pattern.matches(patternNew, filename));
         if (files != null && files.length > 0) {
-            Stream.of(files).forEach(file -> {
+            for (File file : files) {
                 String data = FileUtils.read(file);
                 Sanzijing sanzijing = JSON.parseObject(data, Sanzijing.class);
                 author.setName(sanzijing.getAuthor());
@@ -232,13 +234,13 @@ public class MengxueParser implements PoetryParser {
                 article.setAuthorId(author.getId());
                 article.setContent(sanzijing.getParagraphs());
                 context.addArticle(article);
-            });
+            }
         }
 
         String patternTraditional = "^sanzijing-traditional.json$";
         files = FileUtils.listDirectoryFiles(filePath, (dir, filename) -> Pattern.matches(patternTraditional, filename));
         if (files != null && files.length > 0) {
-            Stream.of(files).forEach(file -> {
+            for (File file : files) {
                 String data = FileUtils.read(file);
                 Sanzijing sanzijing = JSON.parseObject(data, Sanzijing.class);
                 author.setName(sanzijing.getAuthor());
@@ -252,7 +254,7 @@ public class MengxueParser implements PoetryParser {
                 article.setAuthorId(author.getId());
                 article.setContent(sanzijing.getParagraphs());
                 context.addArticle(article);
-            });
+            }
         }
     }
 
@@ -262,11 +264,49 @@ public class MengxueParser implements PoetryParser {
      * @param context 解析上下文
      */
     private void parseShenglvqimeng(ParseContext context, String filePath) {
+        String pattern = "^shenglvqimeng.json$";
+        File[] files = FileUtils.listDirectoryFiles(filePath, (dir, filename) -> Pattern.matches(pattern, filename));
+        if (files != null && files.length > 0) {
+            for (File file : files) {
+                String data = FileUtils.read(file);
+                Shenglvqimeng shenglvqimeng = JSON.parseObject(data, Shenglvqimeng.class);
+                // 作者解析
+                Author author = new Author();
+                author.setId(IdWorker.getIdStr());
+                author.setName(shenglvqimeng.getAuthor());
+                context.putAuthor(author);
+                // 典籍解析
+                Book book = new Book();
+                book.setId(IdWorker.getIdStr());
+                book.setName(shenglvqimeng.getTitle());
+                book.setAuthorId(author.getId());
+                book.setTag(ParserEnum.MENGXUE.getDesc());
+                JSONObject jsonObject = JSON.parseObject(data);
+                book.setIntroduction(jsonObject.getString("abstract"));
+                context.addBook(book);
 
+                for (int i = 0; i < shenglvqimeng.getContent().size(); i++) {
+                    Shenglvqimeng.Content content = shenglvqimeng.getContent().get(i);
+                    for (int j = 0; j < content.getContent().size(); j++) {
+                        Shenglvqimeng.ContentItem item = content.getContent().get(j);
+                        Article article = new Article();
+                        article.setId(IdWorker.getIdStr());
+                        article.setBookId(book.getId());
+                        article.setVolume(content.getTitle());
+                        article.setVolumeSort(i);
+                        article.setTitle(item.getChapter());
+                        article.setSort(j);
+                        article.setAuthorId(author.getId());
+                        article.setContent(item.getParagraphs());
+                        context.addArticle(article);
+                    }
+                }
+            }
+        }
     }
 
     /**
-     * 唐诗三百首
+     * TODO 唐诗三百首
      *
      * @param context 解析上下文
      */
@@ -280,7 +320,43 @@ public class MengxueParser implements PoetryParser {
      * @param context 解析上下文
      */
     private void parseWenzimengqiu(ParseContext context, String filePath) {
+        String pattern = "^wenzimengqiu.json$";
+        File[] files = FileUtils.listDirectoryFiles(filePath, (dir, filename) -> Pattern.matches(pattern, filename));
+        if (files != null && files.length > 0) {
+            for (File file : files) {
+                String data = FileUtils.read(file);
+                Wenzimengqiu wenzimengqiu = JSON.parseObject(data, Wenzimengqiu.class);
+                // 作者解析
+                Author author = new Author();
+                author.setId(IdWorker.getIdStr());
+                // 此处原始文档中存在作者介绍，故截取文本
+                author.setName(wenzimengqiu.getAuthor().split("（")[0]);
+                author.setShortDescription(wenzimengqiu.getAuthor());
+                context.putAuthor(author);
+                // 典籍解析
+                Book book = new Book();
+                book.setId(IdWorker.getIdStr());
+                book.setName(wenzimengqiu.getTitle());
+                book.setAuthorId(author.getId());
+                book.setTag(ParserEnum.MENGXUE.getDesc());
+                JSONObject jsonObject = JSON.parseObject(data);
+                book.setIntroduction(jsonObject.getString("abstract"));
+                book.setPreface(wenzimengqiu.getPreface());
+                context.addBook(book);
 
+                for (int i = 0; i < wenzimengqiu.getContent().size(); i++) {
+                    Wenzimengqiu.Content content = wenzimengqiu.getContent().get(i);
+                    Article article = new Article();
+                    article.setId(IdWorker.getIdStr());
+                    article.setBookId(book.getId());
+                    article.setTitle(content.getTitle());
+                    article.setSort(i);
+                    article.setAuthorId(author.getId());
+                    article.setContent(content.getParagraphs());
+                    context.addArticle(article);
+                }
+            }
+        }
     }
 
     /**
@@ -289,7 +365,45 @@ public class MengxueParser implements PoetryParser {
      * @param context 解析上下文
      */
     private void parseYouxueqionglin(ParseContext context, String filePath) {
+        String pattern = "^youxueqionglin.json$";
+        File[] files = FileUtils.listDirectoryFiles(filePath, (dir, filename) -> Pattern.matches(pattern, filename));
+        if (files != null && files.length > 0) {
+            for (File file : files) {
+                String data = FileUtils.read(file);
+                Youxueqionglin youxueqionglin = JSON.parseObject(data, Youxueqionglin.class);
+                // 作者解析
+                Author author = new Author();
+                author.setId(IdWorker.getIdStr());
+                author.setName(youxueqionglin.getAuthor());
+                context.putAuthor(author);
+                // 典籍解析
+                Book book = new Book();
+                book.setId(IdWorker.getIdStr());
+                book.setName(youxueqionglin.getTitle());
+                book.setAuthorId(author.getId());
+                book.setTag(ParserEnum.MENGXUE.getDesc());
+                JSONObject jsonObject = JSON.parseObject(data);
+                book.setIntroduction(jsonObject.getString("abstract"));
+                context.addBook(book);
 
+                for (int i = 0; i < youxueqionglin.getContent().size(); i++) {
+                    Youxueqionglin.Content content = youxueqionglin.getContent().get(i);
+                    for (int j = 0; j < content.getContent().size(); j++) {
+                        Youxueqionglin.ContentItem item = content.getContent().get(j);
+                        Article article = new Article();
+                        article.setId(IdWorker.getIdStr());
+                        article.setBookId(book.getId());
+                        article.setVolume(content.getTitle());
+                        article.setVolumeSort(i);
+                        article.setTitle(item.getChapter());
+                        article.setSort(j);
+                        article.setAuthorId(author.getId());
+                        article.setContent(item.getParagraphs());
+                        context.addArticle(article);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -298,7 +412,41 @@ public class MengxueParser implements PoetryParser {
      * @param context 解析上下文
      */
     private void parseZengguangxianwen(ParseContext context, String filePath) {
+        String pattern = "^zengguangxianwen.json$";
+        File[] files = FileUtils.listDirectoryFiles(filePath, (dir, filename) -> Pattern.matches(pattern, filename));
+        if (files != null && files.length > 0) {
+            for (File file : files) {
+                String data = FileUtils.read(file);
+                Zengguangxianwen zengguangxianwen = JSON.parseObject(data, Zengguangxianwen.class);
+                // 作者解析
+                Author author = new Author();
+                author.setId(IdWorker.getIdStr());
+                author.setName(zengguangxianwen.getAuthor());
+                context.putAuthor(author);
+                // 典籍解析
+                Book book = new Book();
+                book.setId(IdWorker.getIdStr());
+                book.setName(zengguangxianwen.getTitle());
+                book.setAuthorId(author.getId());
+                book.setTag(ParserEnum.MENGXUE.getDesc());
+                JSONObject jsonObject = JSON.parseObject(data);
+                book.setIntroduction(jsonObject.getString("abstract"));
+                book.setPreface(zengguangxianwen.getPreface());
+                context.addBook(book);
 
+                for (int i = 0; i < zengguangxianwen.getContent().size(); i++) {
+                    Zengguangxianwen.Content content = zengguangxianwen.getContent().get(i);
+                    Article article = new Article();
+                    article.setId(IdWorker.getIdStr());
+                    article.setBookId(book.getId());
+                    article.setTitle(content.getChapter());
+                    article.setSort(i);
+                    article.setAuthorId(author.getId());
+                    article.setContent(content.getParagraphs());
+                    context.addArticle(article);
+                }
+            }
+        }
     }
 
     /**
@@ -307,7 +455,33 @@ public class MengxueParser implements PoetryParser {
      * @param context 解析上下文
      */
     private void parseZhuzijiaxun(ParseContext context, String filePath) {
-
+        String patternNew = "^zhuzijiaxun.json$";
+        File[] files = FileUtils.listDirectoryFiles(filePath, (dir, filename) -> Pattern.matches(patternNew, filename));
+        if (files != null && files.length > 0) {
+            for (File file : files) {
+                String data = FileUtils.read(file);
+                Zhuzijiaxun zhuzijiaxun = JSON.parseObject(data, Zhuzijiaxun.class);
+                // 作者解析
+                Author author = new Author();
+                author.setId(IdWorker.getIdStr());
+                author.setName(zhuzijiaxun.getAuthor());
+                context.putAuthor(author);
+                // 典籍解析
+                Book book = new Book();
+                book.setId(IdWorker.getIdStr());
+                book.setName(zhuzijiaxun.getTitle());
+                book.setAuthorId(author.getId());
+                book.setTag(ParserEnum.MENGXUE.getDesc());
+                context.addBook(book);
+                Article article = new Article();
+                article.setId(IdWorker.getIdStr());
+                article.setBookId(book.getId());
+                article.setTitle(zhuzijiaxun.getTitle());
+                article.setAuthorId(author.getId());
+                article.setContent(zhuzijiaxun.getParagraphs());
+                context.addArticle(article);
+            }
+        }
     }
 
 }

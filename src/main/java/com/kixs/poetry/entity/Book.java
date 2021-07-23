@@ -36,6 +36,9 @@ public class Book implements Serializable {
      * 典籍标签
      */
     private String tag;
-
+    /**
+     * 前言/序言
+     */
+    private String preface;
 
 }

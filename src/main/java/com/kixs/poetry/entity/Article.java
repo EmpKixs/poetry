@@ -1,5 +1,6 @@
 package com.kixs.poetry.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -19,6 +20,7 @@ public class Article implements Serializable {
     /**
      * 主键ID
      */
+    @TableId(value = "id")
     private String id;
     /**
      * 典籍ID
