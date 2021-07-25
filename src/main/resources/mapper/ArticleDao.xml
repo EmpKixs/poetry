@@ -25,7 +25,7 @@
         SELECT
         <include refid="ArticleColumns"/>
 
-        FROM poetry.article
+        FROM article
         <where>
             <if test="id != null and id != ''">
                 AND id = #{id}
@@ -65,7 +65,7 @@
 
     <!--通过主键修改数据-->
     <update id="updateEntity">
-        UPDATE poetry.article
+        UPDATE article
         <set>
             <if test="bookId != null and bookId != ''">
                 book_id = #{bookId},
@@ -102,7 +102,7 @@
     </update>
 
     <insert id="insertBatch" parameterType="com.kixs.poetry.entity.Poetry">
-        INSERT INTO poetry.article (id, book_id, volume, volume_sort, section, section_sort, title, sort, author_id, content, notes)
+        INSERT INTO article (id, book_id, volume, volume_sort, section, section_sort, title, sort, author_id, content, notes)
         VALUES
         <foreach collection="articles" index="index" item="item" separator="," open="" close="" >
             (#{item.id}, #{item.bookId}, #{item.volume}, #{item.volumeSort}, #{item.section}, #{item.sectionSort}, #{item.title}, #{item.sort}, #{item.authorId}, #{item.content}, #{item.notes})

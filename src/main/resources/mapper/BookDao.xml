@@ -20,7 +20,7 @@
         SELECT
         <include refid="BookColumns"/>
 
-        FROM poetry.book
+        FROM book
         <where>
             <if test="id != null and id != ''">
                 AND id = #{id}
@@ -45,7 +45,7 @@
 
     <!--通过主键修改数据-->
     <update id="updateEntity">
-        UPDATE poetry.book
+        UPDATE book
         <set>
             <if test="name != null and name != ''">
                 name = #{name},
@@ -67,7 +67,7 @@
     </update>
 
     <insert id="insertBatch">
-        INSERT INTO poetry.book (id, name, author_id, introduction, tag)
+        INSERT INTO book (id, name, author_id, introduction, tag)
         VALUES
         <foreach collection="books" index="index" item="item" open="" separator="," close="">
             (#{item.id}, #{item.name}, #{item.authorId}, #{item.introduction}, #{item.tag})

@@ -21,7 +21,7 @@
         SELECT
         <include refid="AuthorColumns"/>
 
-        FROM poetry.author
+        FROM author
         <where>
             <if test="id != null and id != ''">
                 AND id = #{id}
@@ -49,7 +49,7 @@
 
     <!--通过主键修改数据-->
     <update id="updateEntity">
-        UPDATE poetry.author
+        UPDATE author
         <set>
             <if test="name != null and name != ''">
                 name = #{name},
@@ -74,7 +74,7 @@
     </update>
 
     <insert id="insertBatch" parameterType="com.kixs.poetry.entity.Author">
-        INSERT INTO poetry.author (id, name, dynasty, birth_date, obit_date, description, short_description)
+        INSERT INTO author (id, name, dynasty, birth_date, obit_date, description, short_description)
         VALUES
         <foreach collection="authors" index="index" item="item" open="" separator="," close="">
             (#{item.id}, #{item.name}, #{item.dynasty}, #{item.birthDate}, #{item.obitDate}, #{item.description}, #{item.shortDescription})
@@ -82,7 +82,7 @@
     </insert>
 
     <select id="queryAuthor" resultMap="AuthorMap">
-        SELECT * FROM poetry.author
+        SELECT * FROM author
     </select>
 
 </mapper>
