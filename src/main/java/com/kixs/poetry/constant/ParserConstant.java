@@ -53,4 +53,29 @@ public interface ParserConstant {
      * 蒙学
      */
     String MENGXUE = "mengxue";
+
+    /**
+     * 诗经
+     */
+    String SHIJING = "shijing";
+
+    /**
+     * 论语
+     */
+    String LUNYU = "lunyu";
+
+    /**
+     * 大学
+     */
+    String DAXUE = "daxue";
+
+    /**
+     * 孟子
+     */
+    String MENGZI = "mengzi";
+
+    /**
+     * 中庸
+     */
+    String ZHONGYONG = "zhongyong";
 }

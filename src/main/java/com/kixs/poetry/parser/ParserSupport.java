@@ -1,11 +1,7 @@
 package com.kixs.poetry.parser;
 
-import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.hankcs.hanlp.HanLP;
-import com.kixs.poetry.entity.Article;
 import com.kixs.poetry.enums.ParserEnum;
-import com.kixs.poetry.parser.mengxue.Wenzimengqiu;
 import com.kixs.poetry.service.ArticleService;
 import com.kixs.poetry.service.AuthorService;
 import com.kixs.poetry.service.BookService;
@@ -17,7 +13,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -59,7 +54,7 @@ public class ParserSupport {
             String path = baseDir + parser.getDir();
             context.add(poetryParser.parse(path));
         }
-        /*if (!CollectionUtils.isEmpty(context.getPoetryList())) {
+        if (!CollectionUtils.isEmpty(context.getPoetryList())) {
             context.getPoetryList().parallelStream().forEach(poetry -> {
                 poetry.setTitle(convert(poetry.getTitle()));
                 poetry.setContent(convert(poetry.getContent()));
@@ -83,59 +78,16 @@ public class ParserSupport {
                 book.setPreface(convert(book.getPreface()));
             });
             bookService.insertBatch(context.getBooks(), 1000);
-        }*/
+        }
         if (!CollectionUtils.isEmpty(context.getArticles())) {
-            for (Article article : context.getArticles()) {
+            context.getArticles().parallelStream().forEach(article -> {
                 article.setVolume(convert(article.getVolume()));
                 article.setSection(convert(article.getSection()));
                 article.setTitle(convert(article.getTitle()));
                 article.setContent(convert(article.getContent()));
                 article.setNotes(convert(article.getNotes()));
-                try {
-                    articleService.insert(article);
-                } catch (Exception e) {
-                    List<String> list = JSON.parseObject(article.getContent(), List.class);
-                    log.error("异常文章内容-Content:{}", article.getContent());
-                    for (String item : list) {
-                        log.info(item);
-                        article.setId(IdWorker.getIdStr());
-                        article.setContent(item);
-                        try {
-                            articleService.insert(article);
-                        } catch (Exception e1) {
-                            log.error("异常文章内容-Item：{}", item);
-                            throw e1;
-                        }
-                    }
-                    throw e;
-                }
-            }
-            /*context.getArticles().forEach(article -> {
-                article.setVolume(convert(article.getVolume()));
-                article.setSection(convert(article.getSection()));
-                article.setTitle(convert(article.getTitle()));
-                article.setContent(convert(article.getContent()));
-                article.setNotes(convert(article.getNotes()));
-                try {
-                    articleService.insert(article);
-                } catch (Exception e) {
-                    List<String> list = JSON.parseObject(article.getContent(), List.class);
-                    log.error("异常文章内容-Content:{}", article.getContent());
-                    list.forEach(item -> {
-                        article.setId(IdWorker.getIdStr());
-                        article.setContent(item);
-                        try {
-                            articleService.insert(article);
-                        } catch (Exception e1) {
-                            log.error("异常文章内容-Item：{}", item);
-                            throw e1;
-                        }
-                    });
-                    throw e;
-                }
-            });*/
-
-            // articleService.insertBatch(context.getArticles(), 500);
+            });
+            articleService.insertBatch(context.getArticles(), 500);
         }
         log.debug("解析数据：作者-{}，诗词-{}，典籍-{}，文章-{}",
                 context.getAuthorMap().size(), context.getPoetryList().size(), context.getBooks().size(), context.getArticles().size());

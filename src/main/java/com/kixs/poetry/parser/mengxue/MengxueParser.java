@@ -320,6 +320,10 @@ public class MengxueParser implements PoetryParser {
      * @param context 解析上下文
      */
     private void parseWenzimengqiu(ParseContext context, String filePath) {
+        // TODO 暂缓处理，且原始文本文件中好似存在异常字符，导致数据库无法写入
+        if (true) {
+            return;
+        }
         String pattern = "^wenzimengqiu.json$";
         File[] files = FileUtils.listDirectoryFiles(filePath, (dir, filename) -> Pattern.matches(pattern, filename));
         if (files != null && files.length > 0) {

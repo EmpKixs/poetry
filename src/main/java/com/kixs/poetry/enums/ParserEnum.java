@@ -24,7 +24,12 @@ public enum ParserEnum {
     WUDAI_NANTANG_POETRY(ParserConstant.WUDAI_NANTANG_POETRY, "五代·南唐二主词", "wudai\\nantang"),
     YUAN_QU(ParserConstant.YUAN_QU, "元曲", "yuanqu\\"),
     CHU_CI(ParserConstant.CHU_CI, "楚辞", "chuci\\"),
-    MENGXUE(ParserConstant.MENGXUE, "蒙学", "mengxue\\");
+    MENGXUE(ParserConstant.MENGXUE, "蒙学", "mengxue\\"),
+    SHIJING(ParserConstant.SHIJING, "诗经", "shijing\\"),
+    LUNYU(ParserConstant.LUNYU, "论语", "lunyu\\"),
+    DAXUE(ParserConstant.DAXUE, "大学", "sishuwujing\\"),
+    MENGZI(ParserConstant.MENGZI, "孟子", "sishuwujing\\"),
+    ZHONGYONG(ParserConstant.ZHONGYONG, "中庸", "sishuwujing\\");
 
     /**
      * 解析器标识
