@@ -52,6 +52,10 @@ public class ParserSupport {
                 continue;
             }
             String path = baseDir + parser.getDir();
+            ParseContext parseContext = poetryParser.parse(path);
+            if (parseContext.getPoetryList().stream().anyMatch(e -> StringUtils.isEmpty(e.getContent()))) {
+                log.warn(parser.getDesc() + "---------------内容存在空值");
+            }
             context.add(poetryParser.parse(path));
         }
         if (!CollectionUtils.isEmpty(context.getPoetryList())) {

@@ -30,7 +30,7 @@ spring:
       test-on-return: false
       test-while-idle: true
       time-between-eviction-runs-millis: 60000
-      url: jdbc:mysql://127.0.0.1:3306/kixs-admin?characterEncoding=utf8&useSSL=false&zeroDateTimeBehavior=convertToNull
+      url: jdbc:mysql://127.0.0.1:3306/poetry?characterEncoding=utf8&useSSL=false&zeroDateTimeBehavior=convertToNull
       username: root
       password: root
   jackson:
@@ -68,7 +68,7 @@ mybatis-plus:
     jdbc-type-for-null: 'null'
 
 poetry:
-  base-dir: D:\Github\chinese-poetry\
+  base-dir: D:\project\chinese-poetry\
 logging:
   config: classpath:logback-spring.xml
 

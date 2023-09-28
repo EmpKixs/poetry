@@ -16,20 +16,23 @@ public enum ParserEnum {
     /**
      * 解析器枚举
      */
-    CAOCAO_POETRY(ParserConstant.CAOCAO_POETRY, "曹操诗集", "caocaoshiji"),
-    SONG_POETRY(ParserConstant.SONG_POETRY, "宋代诗词", ""),
-    SONG_CI(ParserConstant.SONG_CI, "宋词", "ci"),
-    TANG_POETRY(ParserConstant.TANG_POETRY, "唐诗", ""),
-    WUDAI_HUAJIANJI_POETRY(ParserConstant.WUDAI_HUAJIANJI_POETRY, "五代·花间集", "wudai\\huajianji"),
-    WUDAI_NANTANG_POETRY(ParserConstant.WUDAI_NANTANG_POETRY, "五代·南唐二主词", "wudai\\nantang"),
-    YUAN_QU(ParserConstant.YUAN_QU, "元曲", "yuanqu\\"),
-    CHU_CI(ParserConstant.CHU_CI, "楚辞", "chuci\\"),
-    MENGXUE(ParserConstant.MENGXUE, "蒙学", "mengxue\\"),
-    SHIJING(ParserConstant.SHIJING, "诗经", "shijing\\"),
-    LUNYU(ParserConstant.LUNYU, "论语", "lunyu\\"),
-    DAXUE(ParserConstant.DAXUE, "大学", "sishuwujing\\"),
-    MENGZI(ParserConstant.MENGZI, "孟子", "sishuwujing\\"),
-    ZHONGYONG(ParserConstant.ZHONGYONG, "中庸", "sishuwujing\\");
+    CAOCAO_POETRY(ParserConstant.CAOCAO_POETRY, "曹操诗集", "曹操诗集\\"),
+    SONG_POETRY(ParserConstant.SONG_POETRY, "宋诗", "全唐诗\\"),
+    SONG_CI(ParserConstant.SONG_CI, "宋词", "宋词\\"),
+    TANG_POETRY(ParserConstant.TANG_POETRY, "唐诗", "全唐诗\\"),
+    SHUIMO_TANG_POETRY(ParserConstant.SHUIMO_TANG_POETRY, "水墨唐诗", "水墨唐诗\\"),
+    YUDING_TANG_POETRY(ParserConstant.YUDING_TANG_POETRY, "御定全唐诗", "御定全唐詩\\json"),
+    WUDAI_HUAJIANJI_POETRY(ParserConstant.WUDAI_HUAJIANJI_POETRY, "五代诗词·花间集", "五代诗词\\huajianji\\"),
+    WUDAI_NANTANG_POETRY(ParserConstant.WUDAI_NANTANG_POETRY, "五代诗词·南唐二主词", "五代诗词\\nantang\\"),
+    YUAN_QU(ParserConstant.YUAN_QU, "元曲", "元曲\\"),
+    CHU_CI(ParserConstant.CHU_CI, "楚辞", "楚辞\\"),
+    MENGXUE(ParserConstant.MENGXUE, "蒙学", "蒙学\\"),
+    SHIJING(ParserConstant.SHIJING, "诗经", "诗经\\"),
+    LUNYU(ParserConstant.LUNYU, "论语", "论语\\"),
+    // SISHUWUJING(ParserConstant.SISHUWUJING, "四书五经", "四书五经\\"),
+    DAXUE(ParserConstant.DAXUE, "大学", "四书五经\\"),
+    MENGZI(ParserConstant.MENGZI, "孟子", "四书五经\\"),
+    ZHONGYONG(ParserConstant.ZHONGYONG, "中庸", "四书五经\\");
 
     /**
      * 解析器标识

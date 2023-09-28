@@ -42,7 +42,7 @@ public class SongParser implements PoetryParser {
     @Override
     public ParseContext parse(String filePath) {
         // 作者解析
-        String authorFile = filePath + "\\json\\authors.song.json";
+        String authorFile = filePath + "authors.song.json";
         String authorData = FileUtils.read(authorFile);
         List<SongAuthor> songAuthors = JSON.parseArray(authorData, SongAuthor.class);
         ParseContext context = new ParseContext();
@@ -56,7 +56,7 @@ public class SongParser implements PoetryParser {
         });
         // 诗词解析
         String pattern = "^poet.song.([0-9])*.json$";
-        File[] files = FileUtils.listDirectoryFiles(filePath + "\\json", (dir, filename) -> Pattern.matches(pattern, filename));
+        File[] files = FileUtils.listDirectoryFiles(filePath, (dir, filename) -> Pattern.matches(pattern, filename));
         if (files != null && files.length > 0) {
             Stream.of(files).parallel().forEach(file -> {
                 String data = FileUtils.read(file);
@@ -80,8 +80,8 @@ public class SongParser implements PoetryParser {
                 });
             });
         }
-        // 韵律/声调/格律解析
-        String strainsPattern = "^poet.song.([0-9])*.json$";
+        // 韵律/声调/格律解析（转移）
+        /*String strainsPattern = "^poet.song.([0-9])*.json$";
         File[] strainsFiles = FileUtils.listDirectoryFiles(filePath + "\\strains\\json", (dir, filename) -> Pattern.matches(strainsPattern, filename));
         if (strainsFiles != null && strainsFiles.length > 0) {
             Stream.of(strainsFiles).parallel().forEach(file -> {
@@ -96,7 +96,7 @@ public class SongParser implements PoetryParser {
                     }
                 });
             });
-        }
+        }*/
         log.debug("解析宋诗数据：作者-{}，诗词-{}", context.getAuthorMap().size(), context.getPoetryList().size());
         return context;
     }

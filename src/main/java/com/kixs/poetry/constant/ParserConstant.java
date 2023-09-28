@@ -30,6 +30,16 @@ public interface ParserConstant {
     String TANG_POETRY = "tang_poetry";
 
     /**
+     * 水墨唐诗
+     */
+    String SHUIMO_TANG_POETRY = "shuimo_tang_poetry";
+
+    /**
+     * 御定全唐诗
+     */
+    String YUDING_TANG_POETRY = "yuding_tang_poetry";
+
+    /**
      * 五代·花间集
      */
     String WUDAI_HUAJIANJI_POETRY = "wudai_huajianji_poetry";
@@ -63,6 +73,11 @@ public interface ParserConstant {
      * 论语
      */
     String LUNYU = "lunyu";
+
+    /**
+     * 四书五经
+     */
+    String SISHUWUJING = "sishuwujing";
 
     /**
      * 大学

@@ -12,6 +12,7 @@ import com.kixs.poetry.utils.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.io.File;
 import java.util.List;
@@ -42,7 +43,7 @@ public class TangParser implements PoetryParser {
     @Override
     public ParseContext parse(String filePath) {
         // 作者解析
-        String authorFile = filePath + "\\json\\authors.tang.json";
+        String authorFile = filePath + "authors.tang.json";
         String authorData = FileUtils.read(authorFile);
         List<TangAuthor> tangAuthors = JSON.parseArray(authorData, TangAuthor.class);
         ParseContext context = new ParseContext();
@@ -56,7 +57,7 @@ public class TangParser implements PoetryParser {
         });
         // 诗词解析
         String pattern = "^poet.tang.([0-9])*.json$";
-        File[] files = FileUtils.listDirectoryFiles(filePath + "\\json", (dir, filename) -> Pattern.matches(pattern, filename));
+        File[] files = FileUtils.listDirectoryFiles(filePath, (dir, filename) -> Pattern.matches(pattern, filename));
         if (files != null && files.length > 0) {
             Stream.of(files).parallel().forEach(file -> {
                 String data = FileUtils.read(file);
@@ -80,8 +81,8 @@ public class TangParser implements PoetryParser {
                 });
             });
         }
-        // 韵律/声调/格律解析
-        String strainsPattern = "^poet.tang.([0-9])*.json$";
+        // 韵律/声调/格律解析（转移）
+        /*String strainsPattern = "^poet.tang.([0-9])*.json$";
         File[] strainsFiles = FileUtils.listDirectoryFiles(filePath + "\\strains\\json", (dir, filename) -> Pattern.matches(strainsPattern, filename));
         if (strainsFiles != null && strainsFiles.length > 0) {
             Stream.of(strainsFiles).parallel().forEach(file -> {
@@ -96,7 +97,36 @@ public class TangParser implements PoetryParser {
                     }
                 });
             });
-        }
+        }*/
+        // 诗词解析-唐诗三百首
+        String file = filePath + "唐诗三百首.json";
+        String data = FileUtils.read(file);
+        List<TangSanBaiPoetry> poetries = JSON.parseArray(data, TangSanBaiPoetry.class);
+        poetries.stream().parallel().forEach(tang -> {
+            Poetry poetry = new Poetry();
+            poetry.setId(IdWorker.getIdStr());
+            poetry.setType(PoetryType.SHI.getCode());
+            poetry.setTitle(tang.getTitle());
+            Author author = context.getAuthor(this::generateDynastyAuthorKey, tang.getAuthor());
+            if (Objects.isNull(author)) {
+                synchronized (ShuiMoTangParser.class) {
+                    author = context.getAuthor(this::generateDynastyAuthorKey, tang.getAuthor());
+                    if (Objects.isNull(author)) {
+                        author = new Author();
+                        author.setId(IdWorker.getIdStr());
+                        author.setName(tang.getAuthor());
+                        author.setDynasty(dynasty());
+                        context.putAuthor(author);
+                    }
+                }
+            }
+            poetry.setAuthorId(author.getId());
+            poetry.setContent(tang.getParagraphs());
+            if (!CollectionUtils.isEmpty(tang.getTags())) {
+                poetry.setNotes(String.join("；", tang.getTags()));
+            }
+            context.addPoetry(poetry);
+        });
         log.debug("解析唐诗词数据：作者-{}，诗词-{}", context.getAuthorMap().size(), context.getPoetryList().size());
         return context;
     }
